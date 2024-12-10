@@ -64,7 +64,7 @@ export class CameraCaptureFigureComponent {
       const y = (canvas.height - 250) / 2;
 
       // Dibuja el cuadrado
-      context.strokeRect(x, y, 375, 200);
+      context.strokeRect(x, y, 400, 200);
 
        // Agregar texto sobre el rectángulo
       context.fillStyle = 'white'; // Color del texto
