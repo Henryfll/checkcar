@@ -9,18 +9,18 @@
 
           </div>
 
-          <form class="m-t-30">
+          <form class="m-t-30" [formGroup]="form">
             <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Identificación</mat-label>
             <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput />
+              <input matInput formControlName="username"/>
             </mat-form-field>
             <!-- password -->
             <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Pin</mat-label>
             <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput type="password" />
+              <input matInput type="password" formControlName="pin"/>
             </mat-form-field>
 
-            <a  mat-flat-button color="primary" class="w-100" (click)="submit()">
+            <a  mat-flat-button color="primary" class="w-100" (click)="submit()" [disabled]="form.invalid">
               Ingresar
             </a>
             <!-- input -->
