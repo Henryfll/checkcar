@@ -60,11 +60,11 @@ export class CameraCaptureFigureComponent {
 
       // Calcula las coordenadas del cuadrado
       //const rectSize = 300;
-      const x = (canvas.width - 350) / 2;
+      const x = (canvas.width - 400) / 2;
       const y = (canvas.height - 250) / 2;
 
       // Dibuja el cuadrado
-      context.strokeRect(x, y, 300, 200);
+      context.strokeRect(x, y, 375, 200);
 
        // Agregar texto sobre el rectángulo
       context.fillStyle = 'white'; // Color del texto
