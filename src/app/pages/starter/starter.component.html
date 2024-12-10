@@ -1,0 +1,362 @@
+<mat-card class="cardWithShadow theme-card">
+  <mat-card-header>
+    <mat-card-title class="m-b-0">Ingreso de Datos</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="b-t-1">
+
+      <!--steps-->
+      <mat-stepper [linear]="isLinear" orientation="vertical" #stepper>
+        <mat-step [stepControl]="segundoFormGroup" label="Paso 2">
+          <form [formGroup]="segundoFormGroup">
+            <mat-label>¿La matrícula está a nombre del tomador del seguro?</mat-label>
+            <br>
+            <mat-radio-group formControlName="matriculaNombreDelTomador" aria-label="Select an option">
+              <mat-radio-button value="Si">Si</mat-radio-button>
+              <mat-radio-button value="No">No</mat-radio-button>
+            </mat-radio-group>
+            <div>
+              <button mat-stroked-button matStepperPrevious>Regresar</button>
+              <button mat-stroked-button matStepperNext>Siguiente</button>
+            </div>
+          </form>
+        </mat-step>
+        <!--3-->
+        <mat-step [stepControl]="terceroFormGroup" label="Paso 3">
+          <form [formGroup]="terceroFormGroup">
+            <mat-label>Muchas gracias, ahora por favor toma una fotografía legible frontal de la matricula, allí podrás ver los datos del vehículo.</mat-label>
+            <br>
+            <br>
+            <button mat-raised-button color="primary" (click)="openCameraDialogFigure(3)">
+              <mat-icon>photo_camera</mat-icon>
+              Cámara</button>
+            <br>
+            <br>
+             <img *ngIf="matriculaFrontalPhoto" [src]="matriculaFrontalPhoto" alt="Foto Matricula" width="50%"/>
+            <div>
+              <button mat-stroked-button matStepperPrevious>Regresar</button>
+              <button mat-stroked-button matStepperNext>Siguiente</button>
+            </div>
+          </form>
+        </mat-step>
+      <!--4-->
+      <mat-step [stepControl]="cuartoFormGroup" label="Paso 4">
+        <form [formGroup]="cuartoFormGroup">
+          <mat-label>Muchas gracias, ahora por favor toma una fotografía legible posterior de la matrícula, allí podrás ver los datos del dueño del vehículo.</mat-label>
+          <br>
+          <br>
+          <button mat-raised-button color="primary" (click)="openCameraDialog(4)">
+            <mat-icon>photo_camera</mat-icon>
+            Cámara</button>
+          <br>
+          <br>
+          <img *ngIf="matriculaPosteriorPhoto" [src]="matriculaPosteriorPhoto" alt="Foto Matricula" width="50%"/>
+          <div>
+            <button mat-stroked-button matStepperPrevious>Regresar</button>
+            <button mat-stroked-button matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+      <!--5-->
+      <mat-step [stepControl]="quintoFormGroup" label="Paso 5">
+        <form [formGroup]="quintoFormGroup">
+          <mat-label>Envíe la foto del número de chasis del vehículo</mat-label>
+          <br>
+          <br>
+          <button mat-raised-button color="primary" (click)="openCameraDialog(5)">
+            <mat-icon>photo_camera</mat-icon>
+            Cámara</button>
+          <br>
+          <br>
+          <img *ngIf="chasisPhoto" [src]="chasisPhoto" alt="Foto Chasis" width="50%"/>
+          <div>
+            <button mat-stroked-button matStepperPrevious>Regresar</button>
+            <button mat-stroked-button matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+      <!--6-->
+      <mat-step [stepControl]="sextoFormGroup" label="Paso 6">
+        <form [formGroup]="sextoFormGroup">
+          <mat-label>Muchas gracias, por favor toma una fotografía de la parte frontal del vehículo, asegúrate que en la imagen se vean los retrovisores.</mat-label>
+          <br>
+          <br>
+          <button mat-raised-button color="primary" (click)="openCameraDialog(6)">
+            <mat-icon>photo_camera</mat-icon>
+            Cámara</button>
+          <br>
+          <br>
+          <img *ngIf="frontalVehiculoPhoto" [src]="frontalVehiculoPhoto" alt="Foto Frontal" width="50%"/>
+          <div>
+            <button mat-stroked-button matStepperPrevious>Regresar</button>
+            <button mat-stroked-button matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+      <!--7-->
+      <mat-step [stepControl]="septimoFormGroup" label="Paso 7">
+        <form [formGroup]="septimoFormGroup">
+          <mat-label>Muchas gracias, ahora por favor toma una fotografía de la parte posterior del vehículo, asegúrate que en la imagen se vean los faros posteriores.</mat-label>
+          <br>
+          <br>
+          <button mat-raised-button color="primary" (click)="openCameraDialog(7)">
+            <mat-icon>photo_camera</mat-icon>
+            Cámara</button>
+          <br>
+          <br>
+          <img *ngIf="posteriorVehiculoPhoto" [src]="posteriorVehiculoPhoto" alt="Foto Posterior" width="50%"/>
+          <div>
+            <button mat-stroked-button matStepperPrevious>Regresar</button>
+            <button mat-stroked-button matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <!--8-->
+      <mat-step [stepControl]="octavoFormGroup" label="Paso 8">
+        <form [formGroup]="octavoFormGroup">
+          <mat-label>Muchas gracias, ahora por favor toma una fotografía de la parte lateral izquierda del vehículo, asegúrate que en la fotografía se vean los faros delanteros y traseros.</mat-label>
+          <br>
+          <br>
+          <button mat-raised-button color="primary" (click)="openCameraDialog(8)">
+            <mat-icon>photo_camera</mat-icon>
+            Cámara</button>
+          <br>
+          <br>
+          <img *ngIf="izquierdaVehiculoPhoto" [src]="izquierdaVehiculoPhoto" alt="Foto Izquierda" width="50%"/>
+          <div>
+            <button mat-stroked-button matStepperPrevious>Regresar</button>
+            <button mat-stroked-button matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <!--9-->
+      <mat-step [stepControl]="novenoFormGroup" label="Paso 9">
+        <form [formGroup]="novenoFormGroup">
+          <mat-label>Ahora, por favor toma una fotografía del tablero del vehículo, allí podrás ver desde el volante hasta la guantera en una sola imagen.</mat-label>
+          <br>
+          <br>
+          <button mat-raised-button color="primary" (click)="openCameraDialog(9)">
+            <mat-icon>photo_camera</mat-icon>
+            Cámara</button>
+          <br>
+          <br>
+          <img *ngIf="tableroVehiculoPhoto" [src]="tableroVehiculoPhoto" alt="Foto Tablero" width="50%"/>
+          <div>
+            <button mat-stroked-button matStepperPrevious>Regresar</button>
+            <button mat-stroked-button matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+      <!--10-->
+      <mat-step [stepControl]="decimoFormGroup" label="Paso 10">
+        <form [formGroup]="decimoFormGroup">
+          <mat-label>Muchas gracias, ahora por favor toma una fotografía en primer plano del panel de instrumentos del vehículo</mat-label>
+          <br>
+          <br>
+          <button mat-raised-button color="primary" (click)="openCameraDialog(10)">
+            <mat-icon>photo_camera</mat-icon>
+            Cámara</button>
+          <br>
+          <br>
+          <img *ngIf="panelVehiculoPhoto" [src]="panelVehiculoPhoto" alt="Foto Panel" width="50%"/>
+          <div>
+            <button mat-stroked-button matStepperPrevious>Regresar</button>
+            <button mat-stroked-button matStepperNext>Siguiente</button>
+          </div>
+        </form>
+      </mat-step>
+
+        <!--11-->
+        <mat-step [stepControl]="onceFormGroup" label="Paso 11">
+          <form [formGroup]="onceFormGroup">
+            <mat-label>Muchas gracias, ahora por favor toma una fotografía en primer plano del kilometraje del total recorrido.</mat-label>
+            <br>
+            <br>
+            <button mat-raised-button color="primary" (click)="openCameraDialog(11)">
+              <mat-icon>photo_camera</mat-icon>
+              Cámara</button>
+            <br>
+            <br>
+            <img *ngIf="tacometroVehiculoPhoto" [src]="tacometroVehiculoPhoto" alt="Foto Tacometro" width="50%"/>
+            <div>
+              <button mat-stroked-button matStepperPrevious>Regresar</button>
+              <button mat-stroked-button matStepperNext>Siguiente</button>
+            </div>
+          </form>
+        </mat-step>
+ <!--12-->
+ <mat-step [stepControl]="doceFormGroup" label="Paso 12">
+  <form [formGroup]="doceFormGroup">
+    <mat-label>Muchas gracias, ahora vamos con los documentos, por favor toma una fotografía legible de la parte frontal de tu cédula.</mat-label>
+    <br>
+    <br>
+    <button mat-raised-button color="primary" (click)="openCameraDialog(12)">
+      <mat-icon>photo_camera</mat-icon>
+      Cámara</button>
+    <br>
+    <br>
+    <img *ngIf="cedulaPhoto" [src]="cedulaPhoto" alt="Foto cedula" width="50%"/>
+    <div>
+      <button mat-stroked-button matStepperPrevious>Regresar</button>
+      <button mat-stroked-button matStepperNext>Siguiente</button>
+    </div>
+  </form>
+</mat-step>
+<!--13-->
+<mat-step [stepControl]="treceFormGroup" label="Paso 13">
+  <form [formGroup]="treceFormGroup">
+    <mat-label>Muchas gracias, ahora por favor toma una fotografía legible de la parte frontal de tu licencia de conducir.</mat-label>
+    <br>
+    <br>
+    <button mat-raised-button color="primary" (click)="openCameraDialog(13)">
+      <mat-icon>photo_camera</mat-icon>
+      Cámara</button>
+    <br>
+    <br>
+    <img *ngIf="licenciaPhoto" [src]="licenciaPhoto" alt="Foto licencia" width="50%"/>
+    <div>
+      <button mat-stroked-button matStepperPrevious>Regresar</button>
+      <button mat-stroked-button matStepperNext>Siguiente</button>
+    </div>
+  </form>
+</mat-step>
+
+<!--14-->
+<mat-step [stepControl]="catorceFormGroup" label="Accesorios">
+  <form [formGroup]="catorceFormGroup">
+    <mat-label>Desea declarar accesorios extra del vehículo?</mat-label>
+    <br>
+    <mat-radio-group formControlName="tieneAccesorio" aria-label="Select an option">
+      <mat-radio-button value="Si">Si</mat-radio-button>
+      <mat-radio-button value="No">No</mat-radio-button>
+    </mat-radio-group>
+    <br>
+    <mat-card class="cardWithShadow theme-card" *ngIf="ReactiveFrmCatorceFormGroup.tieneAccesorio.value=='Si' ">
+      <mat-card-header>
+        <mat-card-title class="m-b-0">Nuevo Accesorio</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="b-t-1">
+        <form [formGroup]="nuevoAccesorioFormGroup">
+          <mat-label>Por favor, toma una foto del nuevo accesorio que deseas declarar.</mat-label>
+          <br>
+          <br>
+          <button mat-raised-button color="primary" (click)="openCameraDialog(14)">
+            <mat-icon>photo_camera</mat-icon>
+            Cámara</button>
+            <br>
+          <img *ngIf="nuevoAccesorioPhoto" [src]="nuevoAccesorioPhoto" alt="Foto accesorio" width="50%"/>
+          <br>
+            <mat-label>Ingrese el valor del accesorio del vehículo:</mat-label>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="0,0$" formControlName="valorAccesorio" type="number" required>
+            </mat-form-field>
+          <br>
+            <mat-label>Por favor, agregue la descripción del accesorio:</mat-label>
+            <br>
+            <mat-form-field class="example-full-width">
+              <textarea matInput  placeholder="Descripción" formControlName="descripcionAccesorio" required></textarea>
+
+            </mat-form-field>
+        </form>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-raised-button color="primary" [disabled]="!nuevoAccesorioFormGroup.valid" (click)="agregarAccesorio()" >Agregar</button>
+      </mat-card-actions>
+    </mat-card>
+
+    <div class="table-responsive">
+      <table mat-table [dataSource]="listaAccesorios" class="mat-elevation-z8" *ngIf="listaAccesorios.length>0">
+
+        <!-- foto Column -->
+        <ng-container matColumnDef="foto">
+          <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Foto </th>
+          <td mat-cell *matCellDef="let element">
+            <img [src]="element.foto" alt="Foto accesorio" width="100px" style="margin-top: 5px;"/>
+          </td>
+        </ng-container>
+        <!-- valor Column -->
+        <ng-container matColumnDef="valor">
+          <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Valor </th>
+          <td mat-cell *matCellDef="let element"> {{element.valor}} </td>
+        </ng-container>
+        <!-- descripcion Column -->
+        <ng-container matColumnDef="descripcion">
+          <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Descripción </th>
+          <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsAccesorios"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsAccesorios;"></tr>
+      </table>
+    </div>
+
+    <br>
+    <div>
+      <button mat-stroked-button matStepperPrevious>Regresar</button>
+      <button mat-stroked-button matStepperNext [disabled]="ReactiveFrmCatorceFormGroup.tieneAccesorio.value=='Si' && listaAccesorios.length==0 " >Siguiente</button>
+    </div>
+  </form>
+</mat-step>
+<!--18-->
+<mat-step [stepControl]="diezochoFormGroup" label="Paso 18">
+  <form [formGroup]="diezochoFormGroup">
+    <mat-label>¿Tu vehículo tiene algún golpe, rayón, raspadura, abolladura, vidrios rotos o trizados, desgaste en pintura o cualquier tipo de daño?</mat-label>
+            <br>
+            <mat-radio-group formControlName="tieneDaniosVehiculo" aria-label="Select an option">
+              <mat-radio-button value="Si">Si</mat-radio-button>
+              <mat-radio-button value="No">No</mat-radio-button>
+            </mat-radio-group>
+            <div>
+              <button mat-stroked-button matStepperPrevious>Regresar</button>
+              <button mat-stroked-button matStepperNext>Siguiente</button>
+            </div>
+  </form>
+</mat-step>
+
+ <!--19-->
+ <mat-step [stepControl]="diezNueveFormGroup" label="Paso 19">
+  <form [formGroup]="diezNueveFormGroup">
+    <mat-label>Muchas gracias, ahora ingrese una foto del daño del vehículo.</mat-label>
+    <br>
+    <br>
+    <button mat-raised-button color="primary" (click)="openCameraDialog(19)">
+      <mat-icon>photo_camera</mat-icon>
+      Cámara</button>
+    <br>
+    <br>
+    <img *ngIf="danioVehiculoPhoto" [src]="danioVehiculoPhoto" alt="Foto Vehiculo Danio" width="50%"/>
+    <div>
+      <button mat-stroked-button matStepperPrevious>Regresar</button>
+      <button mat-stroked-button matStepperNext>Siguiente</button>
+    </div>
+  </form>
+</mat-step>
+<!--20-->
+<mat-step [stepControl]="veinteFormGroup" label="Paso 20">
+  <form [formGroup]="veinteFormGroup">
+    <mat-label>Por favor, agregue la descripción del problema.</mat-label>
+    <br>
+    <mat-form-field>
+      <mat-label>Descripción</mat-label>
+      <input matInput placeholder="Descripción" formControlName="problemaVehiculo" required>
+    </mat-form-field>
+    <div>
+      <button mat-stroked-button matStepperPrevious>Regresar</button>
+      <button mat-stroked-button matStepperNext>Siguiente</button>
+    </div>
+  </form>
+</mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Registro</ng-template>
+          <p>Gracias por usar nuestro servicio. Hasta la próxima.</p>
+          <div>
+            <button mat-button matStepperPrevious>Regresar</button>
+            <button mat-button (click)="stepper.reset()">Reiniciar</button>
+          </div>
+        </mat-step>
+      </mat-stepper>
+
+      <!--end steps-->
+  </mat-card-content>
+</mat-card>
