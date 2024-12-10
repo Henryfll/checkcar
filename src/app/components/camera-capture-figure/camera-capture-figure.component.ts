@@ -60,7 +60,7 @@ export class CameraCaptureFigureComponent {
 
       // Calcula las coordenadas del cuadrado
       //const rectSize = 300;
-      const x = (canvas.width - 350) / 2;
+      const x = (canvas.width - 300) / 2;
       const y = (canvas.height - 250) / 2;
 
       // Dibuja el cuadrado
