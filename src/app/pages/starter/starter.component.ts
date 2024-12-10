@@ -184,8 +184,8 @@ constructor(
 
 openCameraDialog(preguntaNumber:number): void {
   const dialogRef = this.dialog.open(CameraCaptureComponent, {
-    width: '80%',
-    height: '50%'
+    width: '100%',
+    height: '80%'
   });
 
   dialogRef.afterClosed().subscribe((result: string | undefined) => {
@@ -258,8 +258,8 @@ openCameraDialog(preguntaNumber:number): void {
 }
 openCameraDialogFigure(preguntaNumber:number): void {
   const dialogRef = this.dialog.open(CameraCaptureFigureComponent, {
-    width: '90%',
-    height: '100%'
+    width: '100%',
+    height: '80%'
   });
 
   dialogRef.afterClosed().subscribe((result: string | undefined) => {
