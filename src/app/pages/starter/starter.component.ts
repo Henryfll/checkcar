@@ -13,6 +13,10 @@ import { CameraCaptureComponent } from 'src/app/components/camera-capture/camera
 import { Accesorio } from './interfaces/accesorio';
 import { MatTableModule } from '@angular/material/table';
 import { CameraCaptureFigureComponent } from 'src/app/components/camera-capture-figure/camera-capture-figure.component';
+import { concatMap, of } from 'rxjs';
+import { FormularioService } from './services/formulario.service';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-starter',
@@ -127,10 +131,10 @@ veinteFormGroup = this._formBuilder.group({
 });
 //Por favor envía tu ubicación
 veinteUnoFormGroup = this._formBuilder.group({
-  problemaVehiculo: ['', Validators.required],
+  ubicacionVehiculo: ['', Validators.required],
 });
 //Gracias por usar nuestro servicio. Hasta la próxima.
-isLinear = false;
+isLinear = true;
 
 matriculaFrontalPhoto: string | null = null;
 matriculaPosteriorPhoto: string | null = null;
@@ -149,12 +153,15 @@ nuevoAccesorioPhoto:string | null = null;
 listaAccesorios:Accesorio[]=[];
 columnsAccesorios: string[] = ['foto', 'valor', 'descripcion'];
 
-constructor(private dialog: MatDialog) {
+constructor(
+  private dialog: MatDialog,
+  private _formService:FormularioService,
+  private router: Router
+) {
   this.cedula= localStorage.getItem('cedula')!;
-  console.log("cedula: ",this.cedula);
   this.caso= localStorage.getItem('nro_caso')!;
   this.aseguradora= localStorage.getItem('aseguradora')!;
-  //this.requestLocationAccess();
+  this.requestLocationAccess();
 }
 
 openCameraDialog(preguntaNumber:number): void {
@@ -350,4 +357,481 @@ get ReactiveFrmCatorceFormGroup() {
  get ReactiveFrmNuevoAccesorio() {
   return this.nuevoAccesorioFormGroup.controls;
  }
+
+ procesarPreguntas(): void {
+  this.guardarPrimeraPregunta()
+    .pipe(
+      concatMap(() => this.guardarSegundaPregunta()),
+      concatMap(() => this.guardarTerceraPregunta()),
+      concatMap(() => this.guardarCuartaPregunta()),
+      concatMap(() => this.guardarQuintaPregunta()),
+      concatMap(() => this.guardarSextaPregunta()),
+      concatMap(() => this.guardarSeptimaPregunta()),
+      concatMap(() => this.guardarOctavaPregunta()),
+      concatMap(() => this.guardarNovenaPregunta()),
+      concatMap(() => this.guardarDecimaPregunta()),
+      concatMap(() => this.guardarOncePregunta()),
+      concatMap(() => this.guardarDocePregunta()),
+      concatMap(() => this.guardarTrecePregunta()),
+      concatMap(() => this.guardarCatorcePregunta()),
+      concatMap(() => this.guardarAccesoriosPregunta()),
+      concatMap(() => this.guardarDiezochoPregunta()),
+      concatMap(() => this.guardarChoquePregunta()),
+      concatMap(() => this.guardarFormulario())
+    )
+    .subscribe({
+      next: (response:any) => console.log('Respuesta procesada:', response),
+      error: (error:any) => console.error('Error en la cadena:', error),
+      complete: () => {
+        console.log('Todas las preguntas han sido procesadas.');
+        localStorage.clear();
+        this.router.navigate(['/authentication/login']);
+        Swal.fire('Formulario Guardado','','info');
+      },
+    });
+ }
+
+ guardarPrimeraPregunta() {
+  let latitud=this.primerFormGroup.get("latitude")?.value;
+  let longitud=this.primerFormGroup.get("longitude")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 1",
+    "observacion":`Latitud: ${latitud}, Longitud: ${longitud}`
+  };
+  return this._formService.guardarObservacion(pregunta).pipe(
+    concatMap((resultado) => {
+      console.log('Primera pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+
+ guardarSegundaPregunta() {
+  let matriculaNombreDelTomador=this.segundoFormGroup.get("matriculaNombreDelTomador")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 2",
+    "observacion":`${matriculaNombreDelTomador}`
+  };
+  return this._formService.guardarObservacion(pregunta).pipe(
+    concatMap((resultado) => {
+      console.log('Primera pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+
+ guardarTerceraPregunta() {
+  let imagen=this.terceroFormGroup.get("matriculaFrontal")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 3",
+    "imagen":imagen
+  };
+  return this._formService.guardarInspeccion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la tercera pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 3",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('Tercera pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+ guardarCuartaPregunta() {
+  let imagen=this.cuartoFormGroup.get("matriculaPosterior")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 4",
+    "imagen":imagen
+  };
+  return this._formService.guardarInspeccion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la cuarta pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 4",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('Cuarta pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+ guardarQuintaPregunta() {
+  let imagen=this.quintoFormGroup.get("chasis")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 5",
+    "imagen":imagen
+  };
+  return this._formService.guardarInspeccion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la quinta pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 5",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('Quinta pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+ guardarSextaPregunta() {
+  let imagen=this.sextoFormGroup.get("frontalVehiculo")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 6",
+    "imagen":imagen
+  };
+  return this._formService.guardarInspeccion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la sexta pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 6",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('Sexta pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+ guardarSeptimaPregunta() {
+  let imagen=this.septimoFormGroup.get("posteriorVehiculo")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 7",
+    "imagen":imagen
+  };
+  return this._formService.guardarInspeccion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la septima pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 7",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('Septima pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+ guardarOctavaPregunta() {
+  let imagen=this.octavoFormGroup.get("izquierdaVehiculo")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 8",
+    "imagen":imagen
+  };
+  return this._formService.guardarInspeccion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la octava pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 8",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('Octava pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+
+ guardarNovenaPregunta() {
+  let imagen=this.octavoFormGroup.get("tableroVehiculo")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 9",
+    "imagen":imagen
+  };
+  return this._formService.guardarInspeccion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la novena pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 9",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('Novena pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+ guardarDecimaPregunta() {
+  let imagen=this.decimoFormGroup.get("panelVehiculo")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 10",
+    "imagen":imagen
+  };
+  return this._formService.guardarInspeccion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la decima pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 10",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('Decima pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+
+ guardarOncePregunta() {
+  let imagen=this.onceFormGroup.get("tacometroVehiculo")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 11",
+    "imagen":imagen
+  };
+  return this._formService.guardarInspeccion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la onceava pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 11",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('Onceava pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+
+ guardarDocePregunta() {
+  let imagen=this.doceFormGroup.get("cedula")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 12",
+    "imagen":imagen
+  };
+  return this._formService.guardarInspeccion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la doceava pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 12",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('Doceava pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+ guardarTrecePregunta() {
+  let imagen=this.doceFormGroup.get("licencia")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 13",
+    "imagen":imagen
+  };
+  return this._formService.guardarInspeccion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la treceava pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 13",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('Treceava pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+ guardarCatorcePregunta() {
+  let tieneAc=this.catorceFormGroup.get("tieneAccesorio")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 14",
+    "observacion":tieneAc
+  };
+  return this._formService.guardarObservacion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      console.log('Treceava pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+
+ guardarAccesoriosPregunta() {
+
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 15",
+    "observacion":this.listaAccesorios
+  };
+  return this._formService.guardarAccesorios(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la quinceava pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 15",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('Quinceava pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+
+ guardarDiezochoPregunta() {
+  let tieneDaniosVehiculo=this.diezochoFormGroup.get("tieneDaniosVehiculo")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 16",
+    "observacion":tieneDaniosVehiculo
+  };
+  return this._formService.guardarObservacion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      console.log('DiezSeis pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+ guardarChoquePregunta() {
+  let imagen=this.diezNueveFormGroup.get("danioVehiculo")?.value;
+  let problemaVehiculo=this.veinteFormGroup.get("problemaVehiculo")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 17",
+    "observacion":{
+      "nombre":problemaVehiculo,
+      "imagen":imagen,
+      "precio":"0"
+    }
+  };
+  return this._formService.guardarChoque(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la diezSiete pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 17",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('DiezSiete pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+ guardarFormulario() {
+
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso
+  };
+  return this._formService.finalizarInspeccion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      console.log('Inspeccion Finalizada');
+      return of(resultado);
+    })
+  );
+ }
+
 }

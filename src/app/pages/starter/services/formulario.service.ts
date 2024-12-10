@@ -38,13 +38,13 @@ export class FormularioService {
 
    return this._http.post(this.url,jsonEnvio);
   }
-  guardarAccesorios(inspeccion:any, accesorios:Accesorio[]){
+  guardarAccesorios(inspeccion:any){
     let jsonEnvio={
       "cedula":inspeccion.cedula,
       "aseguradora":inspeccion.aseguradora,
       "nro_caso":inspeccion.nro_caso,
       "seccion":inspeccion.seccion,
-      "observacion":accesorios
+      "observacion":inspeccion.accesorios
     };
 
    return this._http.post(this.url,jsonEnvio);

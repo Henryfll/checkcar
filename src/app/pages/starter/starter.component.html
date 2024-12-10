@@ -6,7 +6,7 @@
 
       <!--steps-->
       <mat-stepper [linear]="isLinear" orientation="vertical" #stepper>
-        <mat-step [stepControl]="segundoFormGroup" label="Paso 2">
+        <mat-step [stepControl]="segundoFormGroup" label="Paso 1">
           <form [formGroup]="segundoFormGroup">
             <mat-label>¿La matrícula está a nombre del tomador del seguro?</mat-label>
             <br>
@@ -21,7 +21,7 @@
           </form>
         </mat-step>
         <!--3-->
-        <mat-step [stepControl]="terceroFormGroup" label="Paso 3">
+        <mat-step [stepControl]="terceroFormGroup" label="Paso 2">
           <form [formGroup]="terceroFormGroup">
             <mat-label>Muchas gracias, ahora por favor toma una fotografía legible frontal de la matricula, allí podrás ver los datos del vehículo.</mat-label>
             <br>
@@ -39,7 +39,7 @@
           </form>
         </mat-step>
       <!--4-->
-      <mat-step [stepControl]="cuartoFormGroup" label="Paso 4">
+      <mat-step [stepControl]="cuartoFormGroup" label="Paso 3">
         <form [formGroup]="cuartoFormGroup">
           <mat-label>Muchas gracias, ahora por favor toma una fotografía legible posterior de la matrícula, allí podrás ver los datos del dueño del vehículo.</mat-label>
           <br>
@@ -57,7 +57,7 @@
         </form>
       </mat-step>
       <!--5-->
-      <mat-step [stepControl]="quintoFormGroup" label="Paso 5">
+      <mat-step [stepControl]="quintoFormGroup" label="Paso 4">
         <form [formGroup]="quintoFormGroup">
           <mat-label>Envíe la foto del número de chasis del vehículo</mat-label>
           <br>
@@ -75,7 +75,7 @@
         </form>
       </mat-step>
       <!--6-->
-      <mat-step [stepControl]="sextoFormGroup" label="Paso 6">
+      <mat-step [stepControl]="sextoFormGroup" label="Paso 5">
         <form [formGroup]="sextoFormGroup">
           <mat-label>Muchas gracias, por favor toma una fotografía de la parte frontal del vehículo, asegúrate que en la imagen se vean los retrovisores.</mat-label>
           <br>
@@ -93,7 +93,7 @@
         </form>
       </mat-step>
       <!--7-->
-      <mat-step [stepControl]="septimoFormGroup" label="Paso 7">
+      <mat-step [stepControl]="septimoFormGroup" label="Paso 6">
         <form [formGroup]="septimoFormGroup">
           <mat-label>Muchas gracias, ahora por favor toma una fotografía de la parte posterior del vehículo, asegúrate que en la imagen se vean los faros posteriores.</mat-label>
           <br>
@@ -112,7 +112,7 @@
       </mat-step>
 
       <!--8-->
-      <mat-step [stepControl]="octavoFormGroup" label="Paso 8">
+      <mat-step [stepControl]="octavoFormGroup" label="Paso 7">
         <form [formGroup]="octavoFormGroup">
           <mat-label>Muchas gracias, ahora por favor toma una fotografía de la parte lateral izquierda del vehículo, asegúrate que en la fotografía se vean los faros delanteros y traseros.</mat-label>
           <br>
@@ -131,7 +131,7 @@
       </mat-step>
 
       <!--9-->
-      <mat-step [stepControl]="novenoFormGroup" label="Paso 9">
+      <mat-step [stepControl]="novenoFormGroup" label="Paso 8">
         <form [formGroup]="novenoFormGroup">
           <mat-label>Ahora, por favor toma una fotografía del tablero del vehículo, allí podrás ver desde el volante hasta la guantera en una sola imagen.</mat-label>
           <br>
@@ -149,7 +149,7 @@
         </form>
       </mat-step>
       <!--10-->
-      <mat-step [stepControl]="decimoFormGroup" label="Paso 10">
+      <mat-step [stepControl]="decimoFormGroup" label="Paso 9">
         <form [formGroup]="decimoFormGroup">
           <mat-label>Muchas gracias, ahora por favor toma una fotografía en primer plano del panel de instrumentos del vehículo</mat-label>
           <br>
@@ -168,7 +168,7 @@
       </mat-step>
 
         <!--11-->
-        <mat-step [stepControl]="onceFormGroup" label="Paso 11">
+        <mat-step [stepControl]="onceFormGroup" label="Paso 10">
           <form [formGroup]="onceFormGroup">
             <mat-label>Muchas gracias, ahora por favor toma una fotografía en primer plano del kilometraje del total recorrido.</mat-label>
             <br>
@@ -186,7 +186,7 @@
           </form>
         </mat-step>
  <!--12-->
- <mat-step [stepControl]="doceFormGroup" label="Paso 12">
+ <mat-step [stepControl]="doceFormGroup" label="Paso 11">
   <form [formGroup]="doceFormGroup">
     <mat-label>Muchas gracias, ahora vamos con los documentos, por favor toma una fotografía legible de la parte frontal de tu cédula.</mat-label>
     <br>
@@ -204,7 +204,7 @@
   </form>
 </mat-step>
 <!--13-->
-<mat-step [stepControl]="treceFormGroup" label="Paso 13">
+<mat-step [stepControl]="treceFormGroup" label="Paso 12">
   <form [formGroup]="treceFormGroup">
     <mat-label>Muchas gracias, ahora por favor toma una fotografía legible de la parte frontal de tu licencia de conducir.</mat-label>
     <br>
@@ -223,7 +223,7 @@
 </mat-step>
 
 <!--14-->
-<mat-step [stepControl]="catorceFormGroup" label="Accesorios">
+<mat-step [stepControl]="catorceFormGroup" label="Paso 13">
   <form [formGroup]="catorceFormGroup">
     <mat-label>Desea declarar accesorios extra del vehículo?</mat-label>
     <br>
@@ -299,7 +299,7 @@
   </form>
 </mat-step>
 <!--18-->
-<mat-step [stepControl]="diezochoFormGroup" label="Paso 18">
+<mat-step [stepControl]="diezochoFormGroup" label="Paso 14">
   <form [formGroup]="diezochoFormGroup">
     <mat-label>¿Tu vehículo tiene algún golpe, rayón, raspadura, abolladura, vidrios rotos o trizados, desgaste en pintura o cualquier tipo de daño?</mat-label>
             <br>
@@ -315,7 +315,7 @@
 </mat-step>
 
  <!--19-->
- <mat-step [stepControl]="diezNueveFormGroup" label="Paso 19">
+ <mat-step [stepControl]="diezNueveFormGroup" label="Paso 15">
   <form [formGroup]="diezNueveFormGroup">
     <mat-label>Muchas gracias, ahora ingrese una foto del daño del vehículo.</mat-label>
     <br>
@@ -333,7 +333,7 @@
   </form>
 </mat-step>
 <!--20-->
-<mat-step [stepControl]="veinteFormGroup" label="Paso 20">
+<mat-step [stepControl]="veinteFormGroup" label="Paso 16">
   <form [formGroup]="veinteFormGroup">
     <mat-label>Por favor, agregue la descripción del problema.</mat-label>
     <br>
@@ -348,11 +348,12 @@
   </form>
 </mat-step>
         <mat-step>
-          <ng-template matStepLabel>Registro</ng-template>
+          <ng-template matStepLabel>Fin</ng-template>
           <p>Gracias por usar nuestro servicio. Hasta la próxima.</p>
           <div>
             <button mat-button matStepperPrevious>Regresar</button>
             <button mat-button (click)="stepper.reset()">Reiniciar</button>
+            <button mat-raised-button color="primary" (click)="procesarPreguntas()">Finalizar</button>
           </div>
         </mat-step>
       </mat-stepper>

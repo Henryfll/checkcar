@@ -9,7 +9,7 @@ export const navItems: NavItem[] = [
     iconName: 'clipboard-text',
     route: '/dashboard',
   },
-  {
+  /*{
     navCap: 'Ui Components',
   },
   {
@@ -72,5 +72,5 @@ export const navItems: NavItem[] = [
     displayName: 'Sample Page',
     iconName: 'brand-dribbble',
     route: '/extra/sample-page',
-  },
+  },*/
 ];
