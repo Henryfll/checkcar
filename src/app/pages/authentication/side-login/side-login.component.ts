@@ -36,6 +36,6 @@ export class AppSideLoginComponent {
 
   submit() {
      console.log("click",this.form.value);
-    this.router.navigate(['/']);
+    this.router.navigate(['/dashboard']);
   }
 }
