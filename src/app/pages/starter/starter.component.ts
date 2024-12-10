@@ -55,7 +55,22 @@ export class StarterComponent {
   segundoFormGroup = this._formBuilder.group({
     matriculaNombreDelTomador: ['', Validators.required],
   });
-
+//parte negativa
+   // ¿Cuentas con el contrato de compraventa debidamente notarizado? Asegúrate de tener a la mano este documento, lo necesitarás más adelante.
+   segundoUnoFormGroup = this._formBuilder.group({
+    tieneContrato: ['', Validators.required],
+  });
+  //si
+      //Por favor toma una foto legible del contrato de compraventa donde aparecen los datos del vehículo y del comprador y vendedor.
+      segundoUnoSiUnoFormGroup = this._formBuilder.group({
+        fotoContrato: ['', Validators.required],
+      });
+      //Muchas gracias, ahora por favor toma una foto legible del contrato de compraventa donde aparece el reconocimiento de firmas del contrato.
+      segundoUnoSiDosFormGroup = this._formBuilder.group({
+        fotoFirmas: ['', Validators.required],
+      });
+  //no fin
+//parte postiva y continuacion
   //Muchas gracias, ahora por favor toma una fotografía legible frontal de la matricula, allí podrás ver los datos del vehículo.
   terceroFormGroup = this._formBuilder.group({
     matriculaFrontal: ['', Validators.required],
@@ -149,6 +164,9 @@ cedulaPhoto:string | null = null;
 licenciaPhoto:string | null = null;
 danioVehiculoPhoto:string | null = null;
 nuevoAccesorioPhoto:string | null = null;
+contratoPhoto:string | null = null;
+firmaPhoto:string | null = null;
+
 
 listaAccesorios:Accesorio[]=[];
 columnsAccesorios: string[] = ['foto', 'valor', 'descripcion'];
@@ -225,6 +243,14 @@ openCameraDialog(preguntaNumber:number): void {
           this.danioVehiculoPhoto = result;
           this.diezNueveFormGroup.get('danioVehiculo')?.setValue(result);
           break;
+        case 21:
+          this.contratoPhoto = result;
+          this.segundoUnoSiUnoFormGroup.get('fotoContrato')?.setValue(result);
+          break;
+        case 22:
+          this.firmaPhoto = result;
+          this.segundoUnoSiDosFormGroup.get('fotoFirmas')?.setValue(result);
+          break;
       }
       //console.log('Foto capturada:', this.matriculaFrontalPhoto);
     }
@@ -291,6 +317,14 @@ openCameraDialogFigure(preguntaNumber:number): void {
           this.danioVehiculoPhoto = result;
           this.diezNueveFormGroup.get('danioVehiculo')?.setValue(result);
           break;
+        case 21:
+          this.contratoPhoto = result;
+          this.segundoUnoSiUnoFormGroup.get('fotoContrato')?.setValue(result);
+          break;
+        case 22:
+          this.firmaPhoto = result;
+          this.segundoUnoSiDosFormGroup.get('fotoFirmas')?.setValue(result);
+          break;
       }
       //console.log('Foto capturada:', this.matriculaFrontalPhoto);
     }
@@ -350,18 +384,33 @@ agregarAccesorio(){
 
   this.nuevoAccesorioPhoto=null;
 }
-
+get ReactiveFrmSegundoFormGroup() {
+  return this.segundoFormGroup.controls;
+ }
+ get ReactiveFrmSegundoUnoFormGroup() {
+  return this.segundoUnoFormGroup.controls;
+ }
 get ReactiveFrmCatorceFormGroup() {
   return this.catorceFormGroup.controls;
+ }
+ get ReactiveFrmDiezOchoFormGroup() {
+  return this.diezochoFormGroup.controls;
  }
  get ReactiveFrmNuevoAccesorio() {
   return this.nuevoAccesorioFormGroup.controls;
  }
 
  procesarPreguntas(): void {
+  let matriculaNombreDelTomador=this.segundoFormGroup.get("matriculaNombreDelTomador")?.value;
+  let tieneContrato=this.segundoUnoFormGroup.get("tieneContrato")?.value;
+  let tieneAc=this.catorceFormGroup.get("tieneAccesorio")?.value;
+  let tieneDaniosVehiculo=this.diezochoFormGroup.get("tieneDaniosVehiculo")?.value;
   this.guardarPrimeraPregunta()
     .pipe(
       concatMap(() => this.guardarSegundaPregunta()),
+      concatMap(() => this.guardarSegundaUnaPregunta()),
+      concatMap(() => this.guardarSegundaUnaSiUnaPregunta()),
+      concatMap(() => this.guardarSegundaUnaSiDosPregunta()),
       concatMap(() => this.guardarTerceraPregunta()),
       concatMap(() => this.guardarCuartaPregunta()),
       concatMap(() => this.guardarQuintaPregunta()),
@@ -425,7 +474,76 @@ get ReactiveFrmCatorceFormGroup() {
     })
   );
  }
-
+ guardarSegundaUnaPregunta() {
+  let tieneContrato=this.segundoUnoFormGroup.get("tieneContrato")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 2.1",
+    "observacion":`${tieneContrato}`
+  };
+  return this._formService.guardarObservacion(pregunta).pipe(
+    concatMap((resultado) => {
+      console.log('Primera pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+ guardarSegundaUnaSiUnaPregunta() {
+  let imagen=this.segundoUnoSiUnoFormGroup.get("fotoContrato")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 2.1.1",
+    "imagen":imagen
+  };
+  return this._formService.guardarInspeccion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la 2.1.1 pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 2.1.1",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('2.1.1 pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
+ guardarSegundaUnaSiDosPregunta() {
+  let imagen=this.segundoUnoSiDosFormGroup.get("fotoFirmas")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 2.1.2",
+    "imagen":imagen
+  };
+  return this._formService.guardarInspeccion(pregunta).pipe(
+    concatMap((resultado:any) => {
+      if (!resultado.error) {
+        console.log('Error en la 2.1.2 pregunta. Registrando error...');
+        const observacion = {
+          "cedula":this.cedula,
+          "aseguradora":this.aseguradora,
+          "nro_caso":this.caso,
+          "seccion":"Seccion 2.1.2",
+          "observacion":resultado.error
+        };
+        return this._formService.guardarObservacion(observacion);
+      }
+      console.log('2.1.2 pregunta guardada correctamente.');
+      return of(resultado);
+    })
+  );
+ }
  guardarTerceraPregunta() {
   let imagen=this.terceroFormGroup.get("matriculaFrontal")?.value;
   const pregunta = {

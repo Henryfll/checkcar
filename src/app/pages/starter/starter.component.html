@@ -15,7 +15,60 @@
               <mat-radio-button value="No">No</mat-radio-button>
             </mat-radio-group>
             <div>
-              <button mat-stroked-button matStepperPrevious>Regresar</button>
+
+              <button mat-stroked-button matStepperNext>Siguiente</button>
+            </div>
+          </form>
+        </mat-step>
+
+        <!--2.1-->
+        <mat-step [stepControl]="segundoUnoFormGroup" label="Paso 1.1" *ngIf="ReactiveFrmSegundoFormGroup.matriculaNombreDelTomador.value=='No' ">
+          <form [formGroup]="segundoUnoFormGroup">
+            <mat-label>¿Cuentas con el contrato de compraventa debidamente notarizado? Asegúrate de tener a la mano este documento, lo necesitarás más adelante.</mat-label>
+            <br>
+            <mat-radio-group formControlName="tieneContrato" aria-label="Select an option">
+              <mat-radio-button value="Si">Si</mat-radio-button>
+              <mat-radio-button value="No">No</mat-radio-button>
+            </mat-radio-group>
+            <div>
+
+              <button mat-stroked-button matStepperNext>Siguiente</button>
+            </div>
+          </form>
+        </mat-step>
+
+        <!--2.1.1-->
+        <mat-step [stepControl]="segundoUnoSiUnoFormGroup" label="Paso 1.1.1" *ngIf="ReactiveFrmSegundoUnoFormGroup.tieneContrato.value=='Si' ">
+          <form [formGroup]="segundoUnoSiUnoFormGroup">
+            <mat-label>Por favor toma una foto legible del contrato de compraventa donde aparecen los datos del vehículo y del comprador y vendedor.</mat-label>
+            <br>
+            <br>
+            <button mat-raised-button color="primary" (click)="openCameraDialogFigure(21)">
+              <mat-icon>photo_camera</mat-icon>
+              Cámara</button>
+            <br>
+            <br>
+             <img *ngIf="contratoPhoto" [src]="contratoPhoto" alt="Foto Contrato" width="50%"/>
+            <div>
+
+              <button mat-stroked-button matStepperNext>Siguiente</button>
+            </div>
+          </form>
+        </mat-step>
+        <!--2.1.2-->
+        <mat-step [stepControl]="segundoUnoSiDosFormGroup" label="Paso 1.1.2" *ngIf="ReactiveFrmSegundoUnoFormGroup.tieneContrato.value=='Si' ">
+          <form [formGroup]="segundoUnoSiDosFormGroup">
+            <mat-label>Muchas gracias, ahora por favor toma una foto legible del contrato de compraventa donde aparece el reconocimiento de firmas del contrato.</mat-label>
+            <br>
+            <br>
+            <button mat-raised-button color="primary" (click)="openCameraDialogFigure(22)">
+              <mat-icon>photo_camera</mat-icon>
+              Cámara</button>
+            <br>
+            <br>
+             <img *ngIf="firmaPhoto" [src]="firmaPhoto" alt="Foto Firmas" width="50%"/>
+            <div>
+
               <button mat-stroked-button matStepperNext>Siguiente</button>
             </div>
           </form>
@@ -33,7 +86,7 @@
             <br>
              <img *ngIf="matriculaFrontalPhoto" [src]="matriculaFrontalPhoto" alt="Foto Matricula" width="50%"/>
             <div>
-              <button mat-stroked-button matStepperPrevious>Regresar</button>
+
               <button mat-stroked-button matStepperNext>Siguiente</button>
             </div>
           </form>
@@ -315,7 +368,7 @@
 </mat-step>
 
  <!--19-->
- <mat-step [stepControl]="diezNueveFormGroup" label="Paso 15">
+ <mat-step [stepControl]="diezNueveFormGroup" label="Paso 15" *ngIf="ReactiveFrmDiezOchoFormGroup.tieneDaniosVehiculo.value=='Si' ">
   <form [formGroup]="diezNueveFormGroup">
     <mat-label>Muchas gracias, ahora ingrese una foto del daño del vehículo.</mat-label>
     <br>
@@ -333,7 +386,7 @@
   </form>
 </mat-step>
 <!--20-->
-<mat-step [stepControl]="veinteFormGroup" label="Paso 16">
+<mat-step [stepControl]="veinteFormGroup" label="Paso 16" *ngIf="ReactiveFrmDiezOchoFormGroup.tieneDaniosVehiculo.value=='Si' ">
   <form [formGroup]="veinteFormGroup">
     <mat-label>Por favor, agregue la descripción del problema.</mat-label>
     <br>
