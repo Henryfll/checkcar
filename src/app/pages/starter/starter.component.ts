@@ -258,8 +258,8 @@ openCameraDialog(preguntaNumber:number): void {
 }
 openCameraDialogFigure(preguntaNumber:number): void {
   const dialogRef = this.dialog.open(CameraCaptureFigureComponent, {
-    width: '80%',
-    height: '50%'
+    width: '90%',
+    height: '100%'
   });
 
   dialogRef.afterClosed().subscribe((result: string | undefined) => {
