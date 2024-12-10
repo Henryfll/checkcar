@@ -42,15 +42,19 @@ export class AppSideLoginComponent {
 
   submit() {
      localStorage.clear();
+
      let cedula:string=this.form.get("username")?.value?? "";
+     localStorage.setItem('cedula', cedula);
      let pin=this.form.get("pin")?.value?? "";
      this._autenticationService.validarUsuario(cedula,pin).subscribe(
-      (respuesta)=>{
+      (respuesta:any)=>{
           console.log(respuesta);
+          localStorage.setItem('aseguradora', respuesta.aseguradora);
+          localStorage.setItem('nro_caso', respuesta.nro_caso);
           this.router.navigate(['/dashboard']);
       },
       (error)=>{
-        Swal.fire('Lo sentimos, error en autenticación','','error');
+        Swal.fire('Error en el ingreso','','error');
         this.router.navigate(['/']);
       },
      );

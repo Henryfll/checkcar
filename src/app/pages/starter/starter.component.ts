@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatRadioButton, MatRadioGroup, MatRadioModule } from '@angular/material/radio';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatStepperModule } from '@angular/material/stepper';
 import { CameraCaptureComponent } from 'src/app/components/camera-capture/camera-capture.component';
 import { Accesorio } from './interfaces/accesorio';
@@ -37,6 +37,10 @@ import { CameraCaptureFigureComponent } from 'src/app/components/camera-capture-
 export class StarterComponent {
 
   private _formBuilder = inject(FormBuilder);
+
+  cedula:string="";
+  aseguradora="";
+  caso="";
 
   //Por favor envía tu ubicación.
   primerFormGroup = this._formBuilder.group({
@@ -146,6 +150,10 @@ listaAccesorios:Accesorio[]=[];
 columnsAccesorios: string[] = ['foto', 'valor', 'descripcion'];
 
 constructor(private dialog: MatDialog) {
+  this.cedula= localStorage.getItem('cedula')!;
+  console.log("cedula: ",this.cedula);
+  this.caso= localStorage.getItem('nro_caso')!;
+  this.aseguradora= localStorage.getItem('aseguradora')!;
   //this.requestLocationAccess();
 }
 
@@ -320,9 +328,9 @@ getLocation(): void {
 
 agregarAccesorio(){
   let nuevoAccesorio:Accesorio={
-    foto:this.nuevoAccesorioFormGroup.get('fotoAccesorio')?.value ?? '',
-    descripcion:this.nuevoAccesorioFormGroup.get('descripcionAccesorio')?.value ?? '',
-    valor: Number(this.nuevoAccesorioFormGroup.get('valorAccesorio')?.value)
+    imagen:this.nuevoAccesorioFormGroup.get('fotoAccesorio')?.value ?? '',
+    nombre:this.nuevoAccesorioFormGroup.get('descripcionAccesorio')?.value ?? '',
+    precio: Number(this.nuevoAccesorioFormGroup.get('valorAccesorio')?.value)
   };
 
   this.listaAccesorios.push(nuevoAccesorio);

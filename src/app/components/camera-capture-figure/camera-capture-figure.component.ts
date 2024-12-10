@@ -28,7 +28,7 @@ export class CameraCaptureFigureComponent {
   startCamera(): void {
     const video = this.videoElement.nativeElement;
 
-    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+    navigator.mediaDevices.getUserMedia({ video: {facingMode: { exact: "environment" },} }).then((stream) => {
       video.srcObject = stream;
       this.videoElement.nativeElement.srcObject = stream;
       this.stream = stream;
