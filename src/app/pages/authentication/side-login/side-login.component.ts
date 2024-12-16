@@ -55,7 +55,7 @@ export class AppSideLoginComponent {
       },
       (error)=>{
         Swal.fire('Error en el ingreso','','error');
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/']);
       },
      );
 
