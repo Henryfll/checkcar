@@ -29,11 +29,11 @@ export class CameraCaptureFigureComponent {
     const video = this.videoElement.nativeElement;
 
     navigator.mediaDevices.getUserMedia({ video: {facingMode: { exact: "environment" },} }).then((stream) => {
+     // navigator.mediaDevices.getUserMedia({ video: true }) .then((stream) => {
       video.srcObject = stream;
       this.videoElement.nativeElement.srcObject = stream;
       this.stream = stream;
       video.addEventListener('loadeddata', () => {
-        console.log('Video dimensions:', video.videoWidth, video.videoHeight);
         video.play();
         this.drawOverlay();
       });

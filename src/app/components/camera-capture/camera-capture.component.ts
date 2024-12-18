@@ -26,7 +26,8 @@ export class CameraCaptureComponent implements OnInit{
 
   startCamera(): void {
     navigator.mediaDevices.getUserMedia({ video: {facingMode: { exact: "environment" },} })
-      .then((stream) => {
+    //navigator.mediaDevices.getUserMedia({ video: true })
+    .then((stream) => {
         this.videoElement.nativeElement.srcObject = stream;
         this.stream = stream;
       })

@@ -17,6 +17,7 @@ import { concatMap, of } from 'rxjs';
 import { FormularioService } from './services/formulario.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { ChatgptService } from './services/chatgpt.service';
 
 @Component({
   selector: 'app-starter',
@@ -170,16 +171,20 @@ firmaPhoto:string | null = null;
 
 listaAccesorios:Accesorio[]=[];
 columnsAccesorios: string[] = ['foto', 'valor', 'descripcion'];
+placa:string;
+vin:string;
 
 constructor(
   private dialog: MatDialog,
   private _formService:FormularioService,
+  private _chatGptService:ChatgptService,
   private router: Router
 ) {
   this.cedula= localStorage.getItem('cedula')!;
   this.caso= localStorage.getItem('nro_caso')!;
   this.aseguradora= localStorage.getItem('aseguradora')!;
   this.requestLocationAccess();
+
 }
 
 openCameraDialog(preguntaNumber:number): void {
@@ -400,11 +405,60 @@ get ReactiveFrmCatorceFormGroup() {
   return this.nuevoAccesorioFormGroup.controls;
  }
 
- procesarPreguntas(): void {
+ async procesarFormulario(){
   let matriculaNombreDelTomador=this.segundoFormGroup.get("matriculaNombreDelTomador")?.value;
   let tieneContrato=this.segundoUnoFormGroup.get("tieneContrato")?.value;
   let tieneAc=this.catorceFormGroup.get("tieneAccesorio")?.value;
   let tieneDaniosVehiculo=this.diezochoFormGroup.get("tieneDaniosVehiculo")?.value;
+
+  let Q1=await this.guardarPrimeraPregunta();
+  let Q2=await this.guardarPrimeraPregunta();
+  if(matriculaNombreDelTomador==="No"){
+    let Q21=await this.guardarSegundaUnaPregunta();
+    if (tieneContrato==="Si") {
+      let Q211=await this.guardarSegundaUnaSiUnaPregunta();
+      let Q212=await this.guardarSegundaUnaSiDosPregunta();
+    }
+  }
+  let Q3=await this.guardarTerceraPregunta();
+  let Q4=await this.guardarCuartaPregunta();
+  let Q5=await this.guardarQuintaPregunta();
+  let Q6=await this.guardarSextaPregunta();
+  if (Q6=="Error Placa") {
+    localStorage.clear();
+    this.router.navigate(['/authentication/login']);
+    Swal.fire('Placas no coinciden','','error');
+  }else{
+    let Q7=await this.guardarSeptimaPregunta();
+    if (Q7=="Error Placa") {
+      localStorage.clear();
+      this.router.navigate(['/authentication/login']);
+      Swal.fire('Placas no coinciden','','error');
+    }else{
+      let Q8=await this.guardarOctavaPregunta();
+      let Q9=await this.guardarNovenaPregunta();
+      let Q10=await this.guardarDecimaPregunta();
+      let Q11=await this.guardarOncePregunta();
+      let Q12=await this.guardarDocePregunta();
+      let Q13=await this.guardarTrecePregunta();
+      let Q14=await this.guardarCatorcePregunta();
+      if (tieneAc=="Si") {
+        let Q15= await this.guardarAccesoriosPregunta();
+      }
+      let Q18=this.guardarDiezochoPregunta();
+      if (tieneDaniosVehiculo=="Si") {
+        let Q19= await this.guardarChoquePregunta();
+      }
+      let fin = await this.guardarFormulario();
+      localStorage.clear();
+        this.router.navigate(['/authentication/login']);
+        Swal.fire('Formulario Guardado','','info');
+    }
+  }
+
+ }
+ /*procesarPreguntas(): void {
+
   this.guardarPrimeraPregunta()
     .pipe(
       concatMap(() => this.guardarSegundaPregunta()),
@@ -438,9 +492,9 @@ get ReactiveFrmCatorceFormGroup() {
         Swal.fire('Formulario Guardado','','info');
       },
     });
- }
+ }*/
 
- guardarPrimeraPregunta() {
+ async guardarPrimeraPregunta() {
   let latitud=this.primerFormGroup.get("latitude")?.value;
   let longitud=this.primerFormGroup.get("longitude")?.value;
   const pregunta = {
@@ -450,15 +504,16 @@ get ReactiveFrmCatorceFormGroup() {
     "seccion":"Seccion 1",
     "observacion":`Latitud: ${latitud}, Longitud: ${longitud}`
   };
-  return this._formService.guardarObservacion(pregunta).pipe(
-    concatMap((resultado) => {
-      console.log('Primera pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarObservacion(pregunta);
+    return { mensaje: 'Q1 OK', respuesta:respuesta };
+  } catch (error) {
+    console.error('Error en Q1:', error);
+    return { mensaje: 'Error Q1'};
+  }
  }
 
- guardarSegundaPregunta() {
+ async guardarSegundaPregunta() {
   let matriculaNombreDelTomador=this.segundoFormGroup.get("matriculaNombreDelTomador")?.value;
   const pregunta = {
     "cedula":this.cedula,
@@ -467,14 +522,15 @@ get ReactiveFrmCatorceFormGroup() {
     "seccion":"Seccion 2",
     "observacion":`${matriculaNombreDelTomador}`
   };
-  return this._formService.guardarObservacion(pregunta).pipe(
-    concatMap((resultado) => {
-      console.log('Primera pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarObservacion(pregunta);
+    return { mensaje: 'Q2 OK', respuesta:respuesta };
+  } catch (error) {
+    console.error('Error en Q2:', error);
+    return { mensaje: 'Error Q2'};
+  }
  }
- guardarSegundaUnaPregunta() {
+ async guardarSegundaUnaPregunta() {
   let tieneContrato=this.segundoUnoFormGroup.get("tieneContrato")?.value;
   const pregunta = {
     "cedula":this.cedula,
@@ -483,203 +539,159 @@ get ReactiveFrmCatorceFormGroup() {
     "seccion":"Seccion 2.1",
     "observacion":`${tieneContrato}`
   };
-  return this._formService.guardarObservacion(pregunta).pipe(
-    concatMap((resultado) => {
-      console.log('Primera pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarObservacion(pregunta);
+    return { mensaje: 'Q2.1 OK', respuesta:respuesta };
+  } catch (error) {
+    console.error('Error en Q2.1:', error);
+    return { mensaje: 'Error Q2.1'};
+  }
  }
- guardarSegundaUnaSiUnaPregunta() {
-  let imagen=this.segundoUnoSiUnoFormGroup.get("fotoContrato")?.value;
+ async guardarSegundaUnaSiUnaPregunta() {
+  let imagen=this.segundoUnoSiUnoFormGroup.get("fotoContrato")?.value?? '';
+  let observacion= await this._chatGptService.esContratoDeCompraventa(imagen);
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 2.1.1",
-    "imagen":imagen
+    "imagen":imagen,
+    "observacion":observacion
   };
-  return this._formService.guardarInspeccion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la 2.1.1 pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 2.1.1",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('2.1.1 pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarInspeccion(pregunta);
+    return { mensaje: 'Q2.1.1 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q2.1.1:', error);
+    return { mensaje: 'Error Q2.1.1'};
+  }
  }
- guardarSegundaUnaSiDosPregunta() {
-  let imagen=this.segundoUnoSiDosFormGroup.get("fotoFirmas")?.value;
+ async guardarSegundaUnaSiDosPregunta() {
+  let imagen=this.segundoUnoSiDosFormGroup.get("fotoFirmas")?.value ?? '';
+  let observacion= await this._chatGptService.esReconocimientoDeFirmas(imagen);
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 2.1.2",
-    "imagen":imagen
+    "imagen":imagen,
+    "observacion":observacion
   };
-  return this._formService.guardarInspeccion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la 2.1.2 pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 2.1.2",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('2.1.2 pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarInspeccion(pregunta);
+    return { mensaje: 'Q2.1.2 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q2.1.2:', error);
+    return { mensaje: 'Error Q2.1.2'};
+  }
  }
- guardarTerceraPregunta() {
-  let imagen=this.terceroFormGroup.get("matriculaFrontal")?.value;
+ async guardarTerceraPregunta() {
+  let imagen=this.terceroFormGroup.get("matriculaFrontal")?.value  ?? '';
+  let observacion= await this._chatGptService.placaYVin(imagen);
+  this.placa=observacion.placa;
+  this.vin=observacion.vin;
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 3",
-    "imagen":imagen
+    "imagen":imagen,
+    "observacion":observacion
   };
-  return this._formService.guardarInspeccion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la tercera pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 3",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('Tercera pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarInspeccion(pregunta);
+    return { mensaje: 'Q3 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q3:', error);
+    return { mensaje: 'Error Q3'};
+  }
  }
- guardarCuartaPregunta() {
-  let imagen=this.cuartoFormGroup.get("matriculaPosterior")?.value;
+ async guardarCuartaPregunta() {
+  let imagen=this.cuartoFormGroup.get("matriculaPosterior")?.value ?? '';
+  let observacion= await this._chatGptService.caraTraseraDeCarnet(imagen);
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 4",
-    "imagen":imagen
+    "imagen":imagen,
+    "observacion":observacion
   };
-  return this._formService.guardarInspeccion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la cuarta pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 4",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('Cuarta pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarInspeccion(pregunta);
+    return { mensaje: 'Q4 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q4:', error);
+    return { mensaje: 'Error Q4'};
+  }
  }
- guardarQuintaPregunta() {
-  let imagen=this.quintoFormGroup.get("chasis")?.value;
+ async guardarQuintaPregunta() {
+  let imagen=this.quintoFormGroup.get("chasis")?.value??'';
+  let observacion= await this._chatGptService.coincideVIN(imagen,this.vin);
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 5",
-    "imagen":imagen
+    "imagen":imagen,
+    "observacion":observacion
   };
-  return this._formService.guardarInspeccion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la quinta pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 5",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('Quinta pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarInspeccion(pregunta);
+    return { mensaje: 'Q5 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q5:', error);
+    return { mensaje: 'Error Q5'};
+  }
  }
- guardarSextaPregunta() {
-  let imagen=this.sextoFormGroup.get("frontalVehiculo")?.value;
-  const pregunta = {
-    "cedula":this.cedula,
-    "aseguradora":this.aseguradora,
-    "nro_caso":this.caso,
-    "seccion":"Seccion 6",
-    "imagen":imagen
-  };
-  return this._formService.guardarInspeccion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la sexta pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 6",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('Sexta pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+ async guardarSextaPregunta() {
+  let imagen=this.sextoFormGroup.get("frontalVehiculo")?.value??'';
+  let observacion= await this._chatGptService.comprobarPlaca(imagen,this.placa);
+  if (observacion) {
+    const pregunta = {
+      "cedula":this.cedula,
+      "aseguradora":this.aseguradora,
+      "nro_caso":this.caso,
+      "seccion":"Seccion 6",
+      "imagen":imagen,
+      "observacion":observacion
+    };
+    try {
+      const respuesta = await this._formService.guardarInspeccion(pregunta);
+      return { mensaje: 'Q6 OK', respuesta: respuesta };
+    } catch (error) {
+      console.error('Error en Q6:', error);
+      return { mensaje: 'Error Q6'};
+    }
+  } else {
+    return 'Error Placa';
+  }
+
  }
- guardarSeptimaPregunta() {
-  let imagen=this.septimoFormGroup.get("posteriorVehiculo")?.value;
-  const pregunta = {
-    "cedula":this.cedula,
-    "aseguradora":this.aseguradora,
-    "nro_caso":this.caso,
-    "seccion":"Seccion 7",
-    "imagen":imagen
-  };
-  return this._formService.guardarInspeccion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la septima pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 7",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('Septima pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+ async guardarSeptimaPregunta() {
+  let imagen=this.septimoFormGroup.get("posteriorVehiculo")?.value??'';
+  let observacion= await this._chatGptService.comprobarPlaca(imagen,this.placa);
+  if (observacion) {
+    const pregunta = {
+      "cedula":this.cedula,
+      "aseguradora":this.aseguradora,
+      "nro_caso":this.caso,
+      "seccion":"Seccion 7",
+      "imagen":imagen,
+      "observacion":observacion
+    };
+    try {
+      const respuesta = await this._formService.guardarInspeccion(pregunta);
+      return { mensaje: 'Q7 OK', respuesta: respuesta };
+    } catch (error) {
+      console.error('Error en Q7:', error);
+      return { mensaje: 'Error Q7'};
+    }
+  } else {
+    return 'Error Placa';
+  }
  }
- guardarOctavaPregunta() {
+ async guardarOctavaPregunta() {
   let imagen=this.octavoFormGroup.get("izquierdaVehiculo")?.value;
   const pregunta = {
     "cedula":this.cedula,
@@ -688,26 +700,16 @@ get ReactiveFrmCatorceFormGroup() {
     "seccion":"Seccion 8",
     "imagen":imagen
   };
-  return this._formService.guardarInspeccion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la octava pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 8",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('Octava pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarInspeccion(pregunta);
+    return { mensaje: 'Q8 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q8:', error);
+    return { mensaje: 'Error Q8'};
+  }
  }
 
- guardarNovenaPregunta() {
+ async guardarNovenaPregunta() {
   let imagen=this.octavoFormGroup.get("tableroVehiculo")?.value;
   const pregunta = {
     "cedula":this.cedula,
@@ -716,25 +718,15 @@ get ReactiveFrmCatorceFormGroup() {
     "seccion":"Seccion 9",
     "imagen":imagen
   };
-  return this._formService.guardarInspeccion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la novena pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 9",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('Novena pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarInspeccion(pregunta);
+    return { mensaje: 'Q9 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q9:', error);
+    return { mensaje: 'Error Q9'};
+  }
  }
- guardarDecimaPregunta() {
+ async guardarDecimaPregunta() {
   let imagen=this.decimoFormGroup.get("panelVehiculo")?.value;
   const pregunta = {
     "cedula":this.cedula,
@@ -743,26 +735,16 @@ get ReactiveFrmCatorceFormGroup() {
     "seccion":"Seccion 10",
     "imagen":imagen
   };
-  return this._formService.guardarInspeccion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la decima pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 10",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('Decima pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarInspeccion(pregunta);
+    return { mensaje: 'Q10 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q10:', error);
+    return { mensaje: 'Error Q10'};
+  }
  }
 
- guardarOncePregunta() {
+ async guardarOncePregunta() {
   let imagen=this.onceFormGroup.get("tacometroVehiculo")?.value;
   const pregunta = {
     "cedula":this.cedula,
@@ -771,80 +753,54 @@ get ReactiveFrmCatorceFormGroup() {
     "seccion":"Seccion 11",
     "imagen":imagen
   };
-  return this._formService.guardarInspeccion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la onceava pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 11",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('Onceava pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarInspeccion(pregunta);
+    return { mensaje: 'Q11 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q11:', error);
+    return { mensaje: 'Error Q11'};
+  }
  }
 
- guardarDocePregunta() {
-  let imagen=this.doceFormGroup.get("cedula")?.value;
+ async guardarDocePregunta() {
+  let imagen=this.doceFormGroup.get("cedula")?.value??'';
+  let observacion= await this._chatGptService.esAnversoCedula(imagen);
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 12",
-    "imagen":imagen
+    "imagen":imagen,
+    "observacion":observacion
   };
-  return this._formService.guardarInspeccion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la doceava pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 12",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('Doceava pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarInspeccion(pregunta);
+    return { mensaje: 'Q12 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q12:', error);
+    return { mensaje: 'Error Q12'};
+  }
  }
- guardarTrecePregunta() {
-  let imagen=this.doceFormGroup.get("licencia")?.value;
+ async guardarTrecePregunta() {
+  let imagen=this.doceFormGroup.get("licencia")?.value??'';
+  let observacion= await this._chatGptService.esAnversoCedula(imagen);
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 13",
-    "imagen":imagen
+    "imagen":imagen,
+    "observacion":observacion
   };
-  return this._formService.guardarInspeccion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la treceava pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 13",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('Treceava pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarInspeccion(pregunta);
+    return { mensaje: 'Q13 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q13:', error);
+    return { mensaje: 'Error Q13'};
+  }
  }
- guardarCatorcePregunta() {
+ async guardarCatorcePregunta() {
   let tieneAc=this.catorceFormGroup.get("tieneAccesorio")?.value;
   const pregunta = {
     "cedula":this.cedula,
@@ -853,15 +809,16 @@ get ReactiveFrmCatorceFormGroup() {
     "seccion":"Seccion 14",
     "observacion":tieneAc
   };
-  return this._formService.guardarObservacion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      console.log('Treceava pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarObservacion(pregunta);
+    return { mensaje: 'Q14 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q14:', error);
+    return { mensaje: 'Error Q14'};
+  }
  }
 
- guardarAccesoriosPregunta() {
+ async guardarAccesoriosPregunta() {
 
   const pregunta = {
     "cedula":this.cedula,
@@ -870,26 +827,16 @@ get ReactiveFrmCatorceFormGroup() {
     "seccion":"Seccion 15",
     "observacion":this.listaAccesorios
   };
-  return this._formService.guardarAccesorios(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la quinceava pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 15",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('Quinceava pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarAccesorios(pregunta);
+    return { mensaje: 'Q15 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q15:', error);
+    return { mensaje: 'Error Q15'};
+  }
  }
 
- guardarDiezochoPregunta() {
+ async guardarDiezochoPregunta() {
   let tieneDaniosVehiculo=this.diezochoFormGroup.get("tieneDaniosVehiculo")?.value;
   const pregunta = {
     "cedula":this.cedula,
@@ -898,14 +845,15 @@ get ReactiveFrmCatorceFormGroup() {
     "seccion":"Seccion 16",
     "observacion":tieneDaniosVehiculo
   };
-  return this._formService.guardarObservacion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      console.log('DiezSeis pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarObservacion(pregunta);
+    return { mensaje: 'Q18 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q18:', error);
+    return { mensaje: 'Error Q18'};
+  }
  }
- guardarChoquePregunta() {
+ async guardarChoquePregunta() {
   let imagen=this.diezNueveFormGroup.get("danioVehiculo")?.value;
   let problemaVehiculo=this.veinteFormGroup.get("problemaVehiculo")?.value;
   const pregunta = {
@@ -919,37 +867,28 @@ get ReactiveFrmCatorceFormGroup() {
       "precio":"0"
     }
   };
-  return this._formService.guardarChoque(pregunta).pipe(
-    concatMap((resultado:any) => {
-      if (!resultado.error) {
-        console.log('Error en la diezSiete pregunta. Registrando error...');
-        const observacion = {
-          "cedula":this.cedula,
-          "aseguradora":this.aseguradora,
-          "nro_caso":this.caso,
-          "seccion":"Seccion 17",
-          "observacion":resultado.error
-        };
-        return this._formService.guardarObservacion(observacion);
-      }
-      console.log('DiezSiete pregunta guardada correctamente.');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.guardarChoque(pregunta);
+    return { mensaje: 'Q19 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q19:', error);
+    return { mensaje: 'Error Q19'};
+  }
  }
- guardarFormulario() {
+ async guardarFormulario() {
 
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso
   };
-  return this._formService.finalizarInspeccion(pregunta).pipe(
-    concatMap((resultado:any) => {
-      console.log('Inspeccion Finalizada');
-      return of(resultado);
-    })
-  );
+  try {
+    const respuesta = await this._formService.finalizarInspeccion(pregunta);
+    return { mensaje: 'Fin OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Inspeccion Finalizada:', error);
+    return { mensaje: 'Error Fin'};
+  }
  }
 
 }
