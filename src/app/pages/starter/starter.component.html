@@ -325,18 +325,18 @@
         <ng-container matColumnDef="foto">
           <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Foto </th>
           <td mat-cell *matCellDef="let element">
-            <img [src]="element.foto" alt="Foto accesorio" width="100px" style="margin-top: 5px;"/>
+            <img [src]="element.imagen" alt="Foto accesorio" width="100px" style="margin-top: 5px;"/>
           </td>
         </ng-container>
         <!-- valor Column -->
         <ng-container matColumnDef="valor">
           <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Valor </th>
-          <td mat-cell *matCellDef="let element"> {{element.valor}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.precio}} </td>
         </ng-container>
         <!-- descripcion Column -->
         <ng-container matColumnDef="descripcion">
           <th mat-header-cell *matHeaderCellDef style="font-weight: bold;"> Descripción </th>
-          <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="columnsAccesorios"></tr>
