@@ -39,6 +39,16 @@ export class CameraCaptureFigureComponent {
       });
     }).catch((error) => {
       console.error('Error al acceder a la cámara:', error);
+      navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then((fallbackStream) => {
+        video.srcObject = fallbackStream;
+        video.play();
+        this.drawOverlay();
+      })
+      .catch((fallbackError) => {
+        console.error("Error al acceder a cualquier cámara:", fallbackError);
+      });
     });
   }
   drawOverlay(): void {

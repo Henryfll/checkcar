@@ -25,15 +25,28 @@ export class CameraCaptureComponent implements OnInit{
   }
 
   startCamera(): void {
-    navigator.mediaDevices.getUserMedia({ video: {facingMode: { exact: "environment" },} })
-    //navigator.mediaDevices.getUserMedia({ video: true })
-    .then((stream) => {
-        this.videoElement.nativeElement.srcObject = stream;
-        this.stream = stream;
-      })
-      .catch((error) => {
-        console.error('Error accessing camera: ', error);
+    const video = this.videoElement.nativeElement;
+
+    navigator.mediaDevices.getUserMedia({ video: {facingMode: { exact: "environment" },} }).then((stream) => {
+     // navigator.mediaDevices.getUserMedia({ video: true }) .then((stream) => {
+      video.srcObject = stream;
+      this.videoElement.nativeElement.srcObject = stream;
+      this.stream = stream;
+      video.addEventListener('loadeddata', () => {
+        video.play();
       });
+    }).catch((error) => {
+      console.error('Error al acceder a la cámara:', error);
+      navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then((fallbackStream) => {
+        video.srcObject = fallbackStream;
+        video.play();
+      })
+      .catch((fallbackError) => {
+        console.error("Error al acceder a cualquier cámara:", fallbackError);
+      });
+    });
   }
 
   capture(): void {
