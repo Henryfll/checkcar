@@ -48,6 +48,11 @@ export class CameraCaptureFigureComponent {
       })
       .catch((fallbackError) => {
         console.error("Error al acceder a cualquier cámara:", fallbackError);
+        if (fallbackError.name === "NotAllowedError") {
+          alert(
+            "Por favor, habilita los permisos de cámara en la configuración de tu dispositivo."
+          );
+        }
       });
     });
   }
