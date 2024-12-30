@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import { MaterialModule } from 'src/app/material.module';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule, NgForOf } from '@angular/common';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 
@@ -25,6 +25,16 @@ export class HeaderComponent {
   @Output() toggleMobileFilterNav = new EventEmitter<void>();
   @Output() toggleCollapsed = new EventEmitter<void>();
 
+  constructor(
+    private router: Router,
+  ){
+
+  }
+
+  logout(){
+    localStorage.clear();
+    this.router.navigate(['/']);
+  }
 
 }
 

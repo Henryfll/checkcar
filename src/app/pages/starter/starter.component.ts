@@ -13,7 +13,6 @@ import { CameraCaptureComponent } from 'src/app/components/camera-capture/camera
 import { Accesorio } from './interfaces/accesorio';
 import { MatTableModule } from '@angular/material/table';
 import { CameraCaptureFigureComponent } from 'src/app/components/camera-capture-figure/camera-capture-figure.component';
-import { concatMap, of } from 'rxjs';
 import { FormularioService } from './services/formulario.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
@@ -174,6 +173,9 @@ columnsAccesorios: string[] = ['foto', 'valor', 'descripcion'];
 placa:string;
 vin:string;
 
+latitud:string;
+longitud:string;
+
 constructor(
   private dialog: MatDialog,
   private _formService:FormularioService,
@@ -183,6 +185,10 @@ constructor(
   this.cedula= localStorage.getItem('cedula')!;
   this.caso= localStorage.getItem('nro_caso')!;
   this.aseguradora= localStorage.getItem('aseguradora')!;
+  if(this.cedula=="" || this.cedula==null){
+    localStorage.clear();
+        this.router.navigate(['/authentication/login']);
+  }
   this.requestLocationAccess();
 
 }
@@ -411,6 +417,9 @@ get ReactiveFrmCatorceFormGroup() {
   let tieneAc=this.catorceFormGroup.get("tieneAccesorio")?.value;
   let tieneDaniosVehiculo=this.diezochoFormGroup.get("tieneDaniosVehiculo")?.value;
 
+  this.latitud=this.primerFormGroup.get("latitude")?.value!;
+  this.longitud=this.primerFormGroup.get("longitude")?.value!;
+
   let Q1=await this.guardarPrimeraPregunta();
   let Q2=await this.guardarPrimeraPregunta();
   if(matriculaNombreDelTomador==="No"){
@@ -495,14 +504,16 @@ get ReactiveFrmCatorceFormGroup() {
  }*/
 
  async guardarPrimeraPregunta() {
-  let latitud=this.primerFormGroup.get("latitude")?.value;
-  let longitud=this.primerFormGroup.get("longitude")?.value;
+
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 1",
-    "observacion":`Latitud: ${latitud}, Longitud: ${longitud}`
+    "observacion":`Latitud: ${this.latitud}, Longitud: ${this.longitud}`,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarObservacion(pregunta);
@@ -520,7 +531,10 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 2",
-    "observacion":`${matriculaNombreDelTomador}`
+    "observacion":`${matriculaNombreDelTomador}`,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarObservacion(pregunta);
@@ -537,7 +551,10 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 2.1",
-    "observacion":`${tieneContrato}`
+    "observacion":`${tieneContrato}`,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarObservacion(pregunta);
@@ -556,7 +573,10 @@ get ReactiveFrmCatorceFormGroup() {
     "nro_caso":this.caso,
     "seccion":"Seccion 2.1.1",
     "imagen":imagen,
-    "observacion":observacion
+    "observacion":observacion,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
@@ -575,7 +595,10 @@ get ReactiveFrmCatorceFormGroup() {
     "nro_caso":this.caso,
     "seccion":"Seccion 2.1.2",
     "imagen":imagen,
-    "observacion":observacion
+    "observacion":observacion,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
@@ -596,7 +619,10 @@ get ReactiveFrmCatorceFormGroup() {
     "nro_caso":this.caso,
     "seccion":"Seccion 3",
     "imagen":imagen,
-    "observacion":observacion
+    "observacion":observacion,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
@@ -615,7 +641,10 @@ get ReactiveFrmCatorceFormGroup() {
     "nro_caso":this.caso,
     "seccion":"Seccion 4",
     "imagen":imagen,
-    "observacion":observacion
+    "observacion":observacion,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
@@ -634,7 +663,10 @@ get ReactiveFrmCatorceFormGroup() {
     "nro_caso":this.caso,
     "seccion":"Seccion 5",
     "imagen":imagen,
-    "observacion":observacion
+    "observacion":observacion,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
@@ -654,7 +686,10 @@ get ReactiveFrmCatorceFormGroup() {
       "nro_caso":this.caso,
       "seccion":"Seccion 6",
       "imagen":imagen,
-      "observacion":observacion
+      "observacion":observacion,
+      "fecha": (new Date).toDateString,
+      "latitud":this.latitud,
+      "longitud":this.longitud,
     };
     try {
       const respuesta = await this._formService.guardarInspeccion(pregunta);
@@ -678,7 +713,10 @@ get ReactiveFrmCatorceFormGroup() {
       "nro_caso":this.caso,
       "seccion":"Seccion 7",
       "imagen":imagen,
-      "observacion":observacion
+      "observacion":observacion,
+      "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
     };
     try {
       const respuesta = await this._formService.guardarInspeccion(pregunta);
@@ -698,7 +736,10 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 8",
-    "imagen":imagen
+    "imagen":imagen,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
@@ -716,7 +757,10 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 9",
-    "imagen":imagen
+    "imagen":imagen,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
@@ -733,7 +777,10 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 10",
-    "imagen":imagen
+    "imagen":imagen,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
@@ -751,7 +798,10 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 11",
-    "imagen":imagen
+    "imagen":imagen,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
@@ -771,7 +821,10 @@ get ReactiveFrmCatorceFormGroup() {
     "nro_caso":this.caso,
     "seccion":"Seccion 12",
     "imagen":imagen,
-    "observacion":observacion
+    "observacion":observacion,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
@@ -790,7 +843,10 @@ get ReactiveFrmCatorceFormGroup() {
     "nro_caso":this.caso,
     "seccion":"Seccion 13",
     "imagen":imagen,
-    "observacion":observacion
+    "observacion":observacion,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
@@ -807,7 +863,10 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 14",
-    "observacion":tieneAc
+    "observacion":tieneAc,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarObservacion(pregunta);
@@ -825,7 +884,10 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 15",
-    "observacion":this.listaAccesorios
+    "observacion":this.listaAccesorios,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarAccesorios(pregunta);
@@ -843,7 +905,10 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 16",
-    "observacion":tieneDaniosVehiculo
+    "observacion":tieneDaniosVehiculo,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarObservacion(pregunta);
@@ -865,7 +930,10 @@ get ReactiveFrmCatorceFormGroup() {
       "nombre":problemaVehiculo,
       "imagen":imagen,
       "precio":"0"
-    }
+    },
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
   };
   try {
     const respuesta = await this._formService.guardarChoque(pregunta);

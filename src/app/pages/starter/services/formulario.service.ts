@@ -83,6 +83,10 @@ export class FormularioService {
       seccion: inspeccion.seccion,
       imagen: inspeccion.imagen,
       observacion: inspeccion.observacion,
+      fechaHora: inspeccion.fecha,
+      latitud:inspeccion.latitud,
+      longitud:inspeccion.longitud,
+      precio:inspeccion.precio
     };
     return lastValueFrom(this._http.post(this.url, jsonEnvio));
   }
@@ -94,6 +98,10 @@ export class FormularioService {
       nro_caso: inspeccion.nro_caso,
       seccion: inspeccion.seccion,
       observacion: inspeccion.observacion,
+      fechaHora: inspeccion.fecha,
+      latitud:inspeccion.latitud,
+      longitud:inspeccion.longitud,
+      precio:inspeccion.precio
     };
     return lastValueFrom(this._http.post(this.url, jsonEnvio));
   }
@@ -105,6 +113,10 @@ export class FormularioService {
       nro_caso: inspeccion.nro_caso,
       seccion: inspeccion.seccion,
       observacion: inspeccion.accesorios,
+      fechaHora: inspeccion.fecha,
+      latitud:inspeccion.latitud,
+      longitud:inspeccion.longitud,
+      precio:inspeccion.precio
     };
     return lastValueFrom(this._http.post(this.url, jsonEnvio));
   }
@@ -120,6 +132,10 @@ export class FormularioService {
         imagen: inspeccion.obsimagen,
         precio: inspeccion.obsprecio,
       },
+      fechaHora: inspeccion.fecha,
+      latitud:inspeccion.latitud,
+      longitud:inspeccion.longitud,
+      precio:inspeccion.precio
     };
     return lastValueFrom(this._http.post(this.url, jsonEnvio));
   }
