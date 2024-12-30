@@ -1,19 +1,21 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { OpenAI } from 'openai';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatgptService {
-  //private apiKey = 'APIKEY';
+
+  private apiKey = environment.apiKey;
 
   private client: OpenAI;
 
   constructor(private http: HttpClient) {
     // Inicializar el cliente de OpenAI con la clave API
     this.client = new OpenAI({
-      apiKey: process.env['API_KEY'] || '',
+      apiKey: this.apiKey,
       dangerouslyAllowBrowser: true
     });
   }
