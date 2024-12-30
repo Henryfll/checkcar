@@ -190,7 +190,6 @@ constructor(
         this.router.navigate(['/authentication/login']);
   }
   this.requestLocationAccess();
-
 }
 
 openCameraDialog(preguntaNumber:number): void {
@@ -567,6 +566,9 @@ get ReactiveFrmCatorceFormGroup() {
  async guardarSegundaUnaSiUnaPregunta() {
   let imagen=this.segundoUnoSiUnoFormGroup.get("fotoContrato")?.value?? '';
   let observacion= await this._chatGptService.esContratoDeCompraventa(imagen);
+  if(observacion==false){
+    this.mensajesError("Error foto de contrato");
+  }
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
@@ -589,6 +591,9 @@ get ReactiveFrmCatorceFormGroup() {
  async guardarSegundaUnaSiDosPregunta() {
   let imagen=this.segundoUnoSiDosFormGroup.get("fotoFirmas")?.value ?? '';
   let observacion= await this._chatGptService.esReconocimientoDeFirmas(imagen);
+  if(observacion == false){
+    this.mensajesError("Error firmas de contrato");
+  }
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
@@ -613,6 +618,9 @@ get ReactiveFrmCatorceFormGroup() {
   let observacion= await this._chatGptService.placaYVin(imagen);
   this.placa=observacion.placa;
   this.vin=observacion.vin;
+  if(observacion.placa == "ABC123"){
+    this.mensajesError("Error en la imagen matricula frontal");
+  }
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
@@ -635,6 +643,9 @@ get ReactiveFrmCatorceFormGroup() {
  async guardarCuartaPregunta() {
   let imagen=this.cuartoFormGroup.get("matriculaPosterior")?.value ?? '';
   let observacion= await this._chatGptService.caraTraseraDeCarnet(imagen);
+  if(observacion == false){
+    this.mensajesError("Error imagen matricula posterior");
+  }
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
@@ -657,6 +668,9 @@ get ReactiveFrmCatorceFormGroup() {
  async guardarQuintaPregunta() {
   let imagen=this.quintoFormGroup.get("chasis")?.value??'';
   let observacion= await this._chatGptService.coincideVIN(imagen,this.vin);
+  if(observacion == false){
+    this.mensajesError("Error imagen chasis");
+  }
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
@@ -679,6 +693,9 @@ get ReactiveFrmCatorceFormGroup() {
  async guardarSextaPregunta() {
   let imagen=this.sextoFormGroup.get("frontalVehiculo")?.value??'';
   let observacion= await this._chatGptService.comprobarPlaca(imagen,this.placa);
+  if(observacion == false){
+    this.mensajesError("Error imagen frontal del vehiculo");
+  }
   if (observacion) {
     const pregunta = {
       "cedula":this.cedula,
@@ -706,6 +723,9 @@ get ReactiveFrmCatorceFormGroup() {
  async guardarSeptimaPregunta() {
   let imagen=this.septimoFormGroup.get("posteriorVehiculo")?.value??'';
   let observacion= await this._chatGptService.comprobarPlaca(imagen,this.placa);
+  if(observacion == false){
+    this.mensajesError("Error imagen  posterior del vehiculo");
+  }
   if (observacion) {
     const pregunta = {
       "cedula":this.cedula,
@@ -815,6 +835,9 @@ get ReactiveFrmCatorceFormGroup() {
  async guardarDocePregunta() {
   let imagen=this.doceFormGroup.get("cedula")?.value??'';
   let observacion= await this._chatGptService.esAnversoCedula(imagen);
+  if(observacion == false){
+    this.mensajesError("Error imagen cedula");
+  }
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
@@ -837,6 +860,9 @@ get ReactiveFrmCatorceFormGroup() {
  async guardarTrecePregunta() {
   let imagen=this.doceFormGroup.get("licencia")?.value??'';
   let observacion= await this._chatGptService.esAnversoCedula(imagen);
+  if(observacion == false){
+    this.mensajesError("Error imagen licencia");
+  }
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
@@ -957,6 +983,33 @@ get ReactiveFrmCatorceFormGroup() {
     console.error('Inspeccion Finalizada:', error);
     return { mensaje: 'Error Fin'};
   }
+ }
+
+ mensajesError(mensaje:string){
+  let timerInterval: ReturnType<typeof setInterval>;
+
+    Swal.fire({
+      title: "Error!",
+      html: mensaje,
+      timer: 2000,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading();
+        const timer = Swal.getHtmlContainer()?.querySelector("b");
+        if (timer) {
+          timerInterval = setInterval(() => {
+            timer.textContent = `${Swal.getTimerLeft()}`;
+          }, 100);
+        }
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      }
+    }).then((result) => {
+      if (result.dismiss === Swal.DismissReason.timer) {
+        //console.log("I was closed by the timer");
+      }
+    });
  }
 
 }
