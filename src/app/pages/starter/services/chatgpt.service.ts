@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ChatgptService {
 
-  private apiKey = environment.apiKey;
+  private apiKey = (window as any).config.apiKey;
 
   private client: OpenAI;
 
