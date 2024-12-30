@@ -6,14 +6,14 @@ import { OpenAI } from 'openai';
   providedIn: 'root'
 })
 export class ChatgptService {
-  private apiKey = 'APIKEY';
+  //private apiKey = 'APIKEY';
 
   private client: OpenAI;
 
   constructor(private http: HttpClient) {
     // Inicializar el cliente de OpenAI con la clave API
     this.client = new OpenAI({
-      apiKey: this.apiKey, // Define en tus variables de entorno
+      apiKey: process.env['API_KEY'] || '',
       dangerouslyAllowBrowser: true
     });
   }
