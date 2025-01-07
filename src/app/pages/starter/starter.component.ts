@@ -567,7 +567,7 @@ get ReactiveFrmCatorceFormGroup() {
   let imagen=this.segundoUnoSiUnoFormGroup.get("fotoContrato")?.value?? '';
   let observacion= await this._chatGptService.esContratoDeCompraventa(imagen);
   if(observacion==false){
-    this.mensajesError("Error foto de contrato");
+    this.mensajesError("Error foto de contrato...Continua el procesamiento");
   }
   const pregunta = {
     "cedula":this.cedula,
@@ -592,7 +592,7 @@ get ReactiveFrmCatorceFormGroup() {
   let imagen=this.segundoUnoSiDosFormGroup.get("fotoFirmas")?.value ?? '';
   let observacion= await this._chatGptService.esReconocimientoDeFirmas(imagen);
   if(observacion == false){
-    this.mensajesError("Error firmas de contrato");
+    this.mensajesError("Error firmas de contrato...Continua el procesamiento");
   }
   const pregunta = {
     "cedula":this.cedula,
@@ -619,7 +619,7 @@ get ReactiveFrmCatorceFormGroup() {
   this.placa=observacion.placa;
   this.vin=observacion.vin;
   if(observacion.placa == "ABC123"){
-    this.mensajesError("Error en la imagen matricula frontal");
+    this.mensajesError("Error en la imagen matricula frontal...Continua el procesamiento");
   }
   const pregunta = {
     "cedula":this.cedula,
@@ -644,7 +644,7 @@ get ReactiveFrmCatorceFormGroup() {
   let imagen=this.cuartoFormGroup.get("matriculaPosterior")?.value ?? '';
   let observacion= await this._chatGptService.caraTraseraDeCarnet(imagen);
   if(observacion == false){
-    this.mensajesError("Error imagen matricula posterior");
+    this.mensajesError("Error imagen matricula posterior...Continua el procesamiento");
   }
   const pregunta = {
     "cedula":this.cedula,
@@ -669,7 +669,7 @@ get ReactiveFrmCatorceFormGroup() {
   let imagen=this.quintoFormGroup.get("chasis")?.value??'';
   let observacion= await this._chatGptService.coincideVIN(imagen,this.vin);
   if(observacion == false){
-    this.mensajesError("Error imagen chasis");
+    this.mensajesError("Error imagen chasis...Continua el procesamiento");
   }
   const pregunta = {
     "cedula":this.cedula,
@@ -694,7 +694,7 @@ get ReactiveFrmCatorceFormGroup() {
   let imagen=this.sextoFormGroup.get("frontalVehiculo")?.value??'';
   let observacion= await this._chatGptService.comprobarPlaca(imagen,this.placa);
   if(observacion == false){
-    this.mensajesError("Error imagen frontal del vehiculo");
+    this.mensajesError("Error imagen frontal del vehiculo...Continua el procesamiento");
   }
   if (observacion) {
     const pregunta = {
@@ -724,7 +724,7 @@ get ReactiveFrmCatorceFormGroup() {
   let imagen=this.septimoFormGroup.get("posteriorVehiculo")?.value??'';
   let observacion= await this._chatGptService.comprobarPlaca(imagen,this.placa);
   if(observacion == false){
-    this.mensajesError("Error imagen  posterior del vehiculo");
+    this.mensajesError("Error imagen  posterior del vehiculo...Continua el procesamiento");
   }
   if (observacion) {
     const pregunta = {
@@ -836,7 +836,7 @@ get ReactiveFrmCatorceFormGroup() {
   let imagen=this.doceFormGroup.get("cedula")?.value??'';
   let observacion= await this._chatGptService.esAnversoCedula(imagen);
   if(observacion == false){
-    this.mensajesError("Error imagen cedula");
+    this.mensajesError("Error imagen cedula...Continua el procesamiento");
   }
   const pregunta = {
     "cedula":this.cedula,
@@ -861,7 +861,7 @@ get ReactiveFrmCatorceFormGroup() {
   let imagen=this.doceFormGroup.get("licencia")?.value??'';
   let observacion= await this._chatGptService.esAnversoCedula(imagen);
   if(observacion == false){
-    this.mensajesError("Error imagen licencia");
+    this.mensajesError("Error imagen licencia...Continua el procesamiento");
   }
   const pregunta = {
     "cedula":this.cedula,
@@ -989,7 +989,7 @@ get ReactiveFrmCatorceFormGroup() {
   let timerInterval: ReturnType<typeof setInterval>;
 
     Swal.fire({
-      title: "Error!",
+      title: "Procesando...!",
       html: mensaje,
       timer: 2000,
       timerProgressBar: true,
