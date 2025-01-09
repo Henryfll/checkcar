@@ -207,24 +207,49 @@ openCameraDialog(preguntaNumber:number): void {
     if (result) {
       switch (preguntaNumber){
         case 3:
+          this.spinner.show();
           this.matriculaFrontalPhoto = result;
-          this.terceroFormGroup.get('matriculaFrontal')?.setValue(result);
+          let fotoMatriculaFrontal = await this.analizarTerceraPregunta();
+          if(fotoMatriculaFrontal){
+            this.terceroFormGroup.get('matriculaFrontal')?.setValue(result);
+          }
+          this.spinner.hide();
           break;
         case 4:
+          this.spinner.show();
           this.matriculaPosteriorPhoto = result;
-          this.cuartoFormGroup.get('matriculaPosterior')?.setValue(result);
+          let fotoMatriculaPosterior = await this.analizarCuartaPregunta();
+          if(fotoMatriculaPosterior){
+            this.cuartoFormGroup.get('matriculaPosterior')?.setValue(result);
+          }
+          this.spinner.hide();
           break;
         case 5:
+          this.spinner.show();
           this.chasisPhoto = result;
-          this.quintoFormGroup.get('chasis')?.setValue(result);
+          let fotoChasis = await this.analizarQuintaPregunta();
+          if(fotoChasis){
+            this.quintoFormGroup.get('chasis')?.setValue(result);
+          }
+          this.spinner.hide();
           break;
         case 6:
+          this.spinner.show();
           this.frontalVehiculoPhoto = result;
-          this.sextoFormGroup.get('frontalVehiculo')?.setValue(result);
+          let fotoVehiculoFrontal = await this.analizarSextaPregunta();
+          if(fotoVehiculoFrontal){
+            this.sextoFormGroup.get('frontalVehiculo')?.setValue(result);
+          }
+          this.spinner.hide();
           break;
         case 7:
+          this.spinner.show();
           this.posteriorVehiculoPhoto = result;
-          this.septimoFormGroup.get('posteriorVehiculo')?.setValue(result);
+          let fotoVehiculoPosterior = await this.analizarSeptimaPregunta();
+          if(fotoVehiculoPosterior){
+            this.septimoFormGroup.get('posteriorVehiculo')?.setValue(result);
+          }
+          this.spinner.hide();
           break;
         case 8:
           this.izquierdaVehiculoPhoto = result;
@@ -243,12 +268,22 @@ openCameraDialog(preguntaNumber:number): void {
           this.onceFormGroup.get('tacometroVehiculo')?.setValue(result);
           break;
         case 12:
+          this.spinner.show();
           this.cedulaPhoto = result;
-          this.doceFormGroup.get('cedula')?.setValue(result);
+          let fotoCedula = await this.analizarDocePregunta();
+          if(fotoCedula){
+            this.doceFormGroup.get('cedula')?.setValue(result);
+          }
+          this.spinner.hide();
           break;
         case 13:
+          this.spinner.show();
           this.licenciaPhoto = result;
-          this.treceFormGroup.get('licencia')?.setValue(result);
+          let fotoLicencia = await this.analizarDocePregunta();
+          if(fotoLicencia){
+            this.treceFormGroup.get('licencia')?.setValue(result);
+          }
+          this.spinner.hide();
           break;
         case 14:
           this.nuevoAccesorioPhoto = result;
@@ -261,18 +296,23 @@ openCameraDialog(preguntaNumber:number): void {
         case 21:
           this.spinner.show();
           this.contratoPhoto = result;
-          let fotoValida = await this.analizarSegundaUnaSiUnaPregunta();
-          if(fotoValida){
+          let fotoContrado = await this.analizarSegundaUnaSiUnaPregunta();
+          if(fotoContrado){
             this.segundoUnoSiUnoFormGroup.get('fotoContrato')?.setValue(result);
           }
           this.spinner.hide();
           break;
         case 22:
+          this.spinner.show()
           this.firmaPhoto = result;
-          this.segundoUnoSiDosFormGroup.get('fotoFirmas')?.setValue(result);
+          let fotoFirmas = await this.analizarSegundaUnaSiDosPregunta();
+          if(fotoFirmas){
+            this.segundoUnoSiDosFormGroup.get('fotoFirmas')?.setValue(result);
+          }
+          this.spinner.hide()
           break;
       }
-      //console.log('Foto capturada:', this.matriculaFrontalPhoto);
+
     }
   });
 }
