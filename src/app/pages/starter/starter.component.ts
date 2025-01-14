@@ -367,6 +367,9 @@ openCameraDialogFigure(preguntaNumber:number): void {
           let fotoVehiculoPosterior = await this.analizarSeptimaPregunta();
           if(fotoVehiculoPosterior){
             this.septimoFormGroup.get('posteriorVehiculo')?.setValue(result);
+          }else{
+            localStorage.clear();
+            this.router.navigate(['/authentication/login']);
           }
           this.spinner.hide();
           break;
@@ -712,7 +715,21 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarTerceraPregunta():Promise<boolean>{
   let observacion= await this._chatGptService.placaYVin(this.matriculaFrontalPhoto??'');
   if(observacion.placa == "ABC123"){
-    Swal.fire("Error en la foto frontal de la matrícula",'','error');
+    Swal.fire({
+      title:"Error en la foto, desea tomar una nueva foto o detener el registro?",
+      showDenyButton: true,
+      confirmButtonText: "Nueva Foto",
+      denyButtonText: `Detener Registro`,
+      confirmButtonColor: "#5d87ff",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.openCameraDialogFigure(3);
+      } else if (result.isDenied) {
+        localStorage.clear();
+        this.router.navigate(['/authentication/login']);
+        Swal.fire("Registro finalizado ", "", "error");
+      }
+    });
     this.matriculaFrontalPhoto=null;
     return false;
   }
@@ -840,7 +857,7 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarSeptimaPregunta():Promise<boolean>{
   let observacion= await this._chatGptService.comprobarPlaca(this.posteriorVehiculoPhoto??'',this.placa);
   if(observacion == false){
-    Swal.fire("Error la imagen no corresponde a la parte posterior del vehiculo",'','error');
+    Swal.fire("Error las placas no coinciden",'','error');
     this.posteriorVehiculoPhoto=null;
     return false;
   }
