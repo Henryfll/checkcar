@@ -654,7 +654,7 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarSegundaUnaSiUnaPregunta():Promise<boolean>{
   let observacion= await this._chatGptService.esContratoDeCompraventa(this.contratoPhoto??'');
   if(observacion==false){
-    Swal.fire("La foto no pertenece a un contrato de compra y venta",'','error');
+    Swal.fire("<p style='line-height: 1.5;'>La foto no pertenece a un contrato de compra y venta</p>",'','error');
     this.contratoPhoto=null;
     return false;
   }
@@ -685,7 +685,7 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarSegundaUnaSiDosPregunta():Promise<boolean>{
   let observacion= await this._chatGptService.esReconocimientoDeFirmas(this.firmaPhoto??'');
   if(observacion==false){
-    Swal.fire("La foto no contiene las firmas del contrato",'','error');
+    Swal.fire("<p style='line-height: 1.5;'>La foto no contiene las firmas del contrato</p>",'','error');
     this.firmaPhoto=null;
     return false;
   }
@@ -716,7 +716,7 @@ get ReactiveFrmCatorceFormGroup() {
   let observacion= await this._chatGptService.placaYVin(this.matriculaFrontalPhoto??'');
   if(observacion.placa == "ABC123"){
     Swal.fire({
-      title:"Error en la foto, desea tomar una nueva foto o detener el registro?",
+      title:"<p style='line-height: 1.5;'>Error en la foto, desea tomar una nueva foto o detener el registro?</p>",
       showDenyButton: true,
       confirmButtonText: "Nueva Foto",
       denyButtonText: `Detener Registro`,
@@ -761,7 +761,7 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarCuartaPregunta():Promise<boolean>{
   let observacion= await this._chatGptService.caraTraseraDeCarnet(this.matriculaPosteriorPhoto??'');
   if(observacion == false){
-    Swal.fire("Error en la foto posterior de la matrícula",'','error');
+    Swal.fire("<p style='line-height: 1.5;'>Error en la foto posterior de la matrícula</p>",'','error');
     this.matriculaPosteriorPhoto=null;
     return false;
   }
@@ -791,7 +791,7 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarQuintaPregunta():Promise<boolean>{
   let observacion= await this._chatGptService.coincideVIN(this.chasisPhoto??'',this.vin);
   if(observacion == false){
-    Swal.fire("Error la imagen no corresponde al chasis",'','error');
+    Swal.fire("<p style='line-height: 1.5;'>Error la imagen no corresponde al chasis</p>",'','error');
     this.chasisPhoto=null;
     return false;
   }
@@ -825,7 +825,7 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarSextaPregunta():Promise<boolean>{
   let observacion= await this._chatGptService.comprobarPlaca(this.frontalVehiculoPhoto??'',this.placa);
   if(observacion == false){
-    Swal.fire("Error la imagen no corresponde a la parte frontal del vehiculo",'','error');
+    Swal.fire("<p style='line-height: 1.5;'>Error la imagen no corresponde a la parte frontal del vehiculo</p>",'','error');
     this.frontalVehiculoPhoto=null;
     return false;
   }
@@ -857,7 +857,7 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarSeptimaPregunta():Promise<boolean>{
   let observacion= await this._chatGptService.comprobarPlaca(this.posteriorVehiculoPhoto??'',this.placa);
   if(observacion == false){
-    Swal.fire("Error las placas no coinciden",'','error');
+    Swal.fire("<p style='line-height: 1.5;'>Error las placas no coinciden</p>",'','error');
     this.posteriorVehiculoPhoto=null;
     return false;
   }
@@ -970,7 +970,7 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarDocePregunta():Promise<boolean>{
   let observacion= await this._chatGptService.esAnversoCedula(this.cedulaPhoto??'');
   if(observacion == false){
-    Swal.fire("Error la imagen no corresponde a una cedula",'','error');
+    Swal.fire("<p style='line-height: 1.5;'>Error la imagen no corresponde a una cedula</p>",'','error');
     this.cedulaPhoto=null;
     return false;
   }
@@ -1000,7 +1000,7 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarTrecePregunta():Promise<boolean>{
   let observacion= await this._chatGptService.esAnversoCedula(this.licenciaPhoto??'');
   if(observacion == false){
-    Swal.fire("Error la imagen no corresponde a una licencia",'','error');
+    Swal.fire("<p style='line-height: 1.5;'>Error la imagen no corresponde a una licencia</p>",'','error');
     this.licenciaPhoto=null;
     return false;
   }
