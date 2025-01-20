@@ -811,9 +811,29 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarQuintaPregunta():Promise<boolean>{
   let observacion= await this._chatGptService.coincideVIN(this.chasisPhoto??'',this.vin);
   if(observacion == false){
-    Swal.fire("<p style='line-height: 1.5;'>Error la imagen no corresponde al chasis</p>",'','error');
-    this.chasisPhoto=null;
-    return false;
+    let popupstate:boolean=false;
+    const result = await Swal.fire({
+      title: "<p style='line-height: 1.5;'>Error la imagen no corresponde al chasis</p>",
+      showDenyButton: true,
+      confirmButtonText: "Nueva Foto",
+      denyButtonText: "Continuar Registro",
+      confirmButtonColor: "#5d87ff",
+    });
+
+      if (result.isConfirmed) {
+        this.openCameraDialogFigure(5);
+        popupstate =false;
+      } else if (result.isDenied) {
+        popupstate =true;
+      }
+
+    if(popupstate){
+      return true;
+    }else{
+      this.chasisPhoto=null;
+      return false;
+    }
+
   }
   return true;
  }
@@ -845,9 +865,29 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarSextaPregunta():Promise<boolean>{
   let observacion= await this._chatGptService.comprobarPlaca(this.frontalVehiculoPhoto??'',this.placa);
   if(observacion == false){
-    Swal.fire("<p style='line-height: 1.5;'>Error la imagen no corresponde a la parte frontal del vehiculo</p>",'','error');
-    this.frontalVehiculoPhoto=null;
-    return false;
+    let popupstate:boolean=false;
+    const result = await Swal.fire({
+      title: "<p style='line-height: 1.5;'>Error la imagen no corresponde a la parte frontal del vehiculo</p>",
+      showDenyButton: true,
+      confirmButtonText: "Nueva Foto",
+      denyButtonText: "Continuar Registro",
+      confirmButtonColor: "#5d87ff",
+    });
+
+      if (result.isConfirmed) {
+        this.openCameraDialogFigure(6);
+        popupstate =false;
+      } else if (result.isDenied) {
+        popupstate =true;
+      }
+
+    if(popupstate){
+      return true;
+    }else{
+      this.frontalVehiculoPhoto=null;
+      return false;
+    }
+
   }
   return true;
  }
@@ -877,9 +917,29 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarSeptimaPregunta():Promise<boolean>{
   let observacion= await this._chatGptService.comprobarPlaca(this.posteriorVehiculoPhoto??'',this.placa);
   if(observacion == false){
-    Swal.fire("<p style='line-height: 1.5;'>Error las placas no coinciden</p>",'','error');
-    this.posteriorVehiculoPhoto=null;
-    return false;
+    let popupstate:boolean=false;
+    const result = await Swal.fire({
+      title: "<p style='line-height: 1.5;'>Error las placas no coinciden</p>",
+      showDenyButton: true,
+      confirmButtonText: "Nueva Foto",
+      denyButtonText: "Continuar Registro",
+      confirmButtonColor: "#5d87ff",
+    });
+
+      if (result.isConfirmed) {
+        this.openCameraDialogFigure(7);
+        popupstate =false;
+      } else if (result.isDenied) {
+        popupstate =true;
+      }
+
+    if(popupstate){
+      return true;
+    }else{
+      this.posteriorVehiculoPhoto=null;
+      return false;
+    }
+
   }
   return true;
  }
@@ -990,9 +1050,29 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarDocePregunta():Promise<boolean>{
   let observacion= await this._chatGptService.esAnversoCedula(this.cedulaPhoto??'');
   if(observacion == false){
-    Swal.fire("<p style='line-height: 1.5;'>Error la imagen no corresponde a una cedula</p>",'','error');
-    this.cedulaPhoto=null;
-    return false;
+    let popupstate:boolean=false;
+    const result = await Swal.fire({
+      title: "<p style='line-height: 1.5;'>Error la imagen no corresponde a una cedula</p>",
+      showDenyButton: true,
+      confirmButtonText: "Nueva Foto",
+      denyButtonText: "Continuar Registro",
+      confirmButtonColor: "#5d87ff",
+    });
+
+      if (result.isConfirmed) {
+        this.openCameraDialogFigure(12);
+        popupstate =false;
+      } else if (result.isDenied) {
+        popupstate =true;
+      }
+
+    if(popupstate){
+      return true;
+    }else{
+      this.cedulaPhoto=null;
+      return false;
+    }
+
   }
   return true;
  }
@@ -1020,9 +1100,29 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarTrecePregunta():Promise<boolean>{
   let observacion= await this._chatGptService.esAnversoCedula(this.licenciaPhoto??'');
   if(observacion == false){
-    Swal.fire("<p style='line-height: 1.5;'>Error la imagen no corresponde a una licencia</p>",'','error');
-    this.licenciaPhoto=null;
-    return false;
+    let popupstate:boolean=false;
+    const result = await Swal.fire({
+      title: "<p style='line-height: 1.5;'>Error la imagen no corresponde a una licencia</p>",
+      showDenyButton: true,
+      confirmButtonText: "Nueva Foto",
+      denyButtonText: "Continuar Registro",
+      confirmButtonColor: "#5d87ff",
+    });
+
+      if (result.isConfirmed) {
+        this.openCameraDialogFigure(13);
+        popupstate =false;
+      } else if (result.isDenied) {
+        popupstate =true;
+      }
+
+    if(popupstate){
+      return true;
+    }else{
+      this.licenciaPhoto=null;
+      return false;
+    }
+
   }
   return true;
  }
