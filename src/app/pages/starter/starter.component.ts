@@ -762,20 +762,21 @@ get ReactiveFrmCatorceFormGroup() {
   let observacion= await this._chatGptService.caraTraseraDeCarnet(this.matriculaPosteriorPhoto??'');
   if(observacion == false){
     let popupstate:boolean=false;
-    Swal.fire({
-      title:"<p style='line-height: 1.5;'>Error en la foto posterior de la matrícula</p>",
+    const result = await Swal.fire({
+      title: "<p style='line-height: 1.5;'>Error en la foto posterior de la matrícula</p>",
       showDenyButton: true,
       confirmButtonText: "Nueva Foto",
-      denyButtonText: `Continuar Registro`,
+      denyButtonText: "Continuar Registro",
       confirmButtonColor: "#5d87ff",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        popupstate=false;
-        this.openCameraDialogFigure(4);
-      } else if (result.isDenied) {
-        popupstate=true;
-      }
     });
+
+      if (result.isConfirmed) {
+        this.openCameraDialogFigure(4);
+        popupstate =false;
+      } else if (result.isDenied) {
+        popupstate =true;
+      }
+
     if(popupstate){
       return true;
     }else{
