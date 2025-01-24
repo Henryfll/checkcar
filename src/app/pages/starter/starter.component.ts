@@ -735,7 +735,6 @@ get ReactiveFrmCatorceFormGroup() {
   }
   this.placa=observacion.placa;
   this.vin=observacion.vin;
-  alert(`${this.placa}=${this.vin}`);
   return true;
  }
  async guardarCuartaPregunta() {
