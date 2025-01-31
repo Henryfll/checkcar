@@ -28,11 +28,12 @@ export class CameraCaptureFigureComponent {
   startCamera(): void {
     const video = this.videoElement.nativeElement;
 
-    navigator.mediaDevices.getUserMedia({ video: {facingMode: { exact: "environment" },} }).then((stream) => {
+    navigator.mediaDevices.getUserMedia({ video: {facingMode: { ideal: "environment" },frameRate: { max: 1 }} }).then((stream) => {
      // navigator.mediaDevices.getUserMedia({ video: true }) .then((stream) => {
       video.srcObject = stream;
       this.videoElement.nativeElement.srcObject = stream;
       this.stream = stream;
+      video.setAttribute("playsInline", "true");
       video.addEventListener('loadeddata', () => {
         video.play();
         this.drawOverlay();
