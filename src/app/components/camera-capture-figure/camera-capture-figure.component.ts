@@ -28,7 +28,7 @@ export class CameraCaptureFigureComponent {
   startCamera(): void {
     const video = this.videoElement.nativeElement;
 
-    navigator.mediaDevices.getUserMedia({ video: {facingMode: { ideal: "environment" },frameRate: { max: 1 }} }).then((stream) => {
+    navigator.mediaDevices.getUserMedia({ video: {facingMode: { ideal: "environment" },frameRate: { ideal: 15, max: 30 }, } }).then((stream) => {
      // navigator.mediaDevices.getUserMedia({ video: true }) .then((stream) => {
       video.srcObject = stream;
       this.videoElement.nativeElement.srcObject = stream;
