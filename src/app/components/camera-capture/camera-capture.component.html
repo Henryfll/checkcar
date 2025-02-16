@@ -1,7 +1,11 @@
+<div class="container">
+  <div class="video-container">
+    <video #video autoplay playsinline></video>
+  </div>
 
+  <canvas #canvas style="display: none;"></canvas>
 
-    <video #video autoplay></video>
-    <canvas #canvas></canvas>
-
-    <button mat-raised-button color="primary" (click)="capture()">Tomar Foto</button>
- 
+  <div class="controls">
+    <button mat-button color="primary" (click)="capture()">Tomar Foto</button>
+  </div>
+</div>

@@ -199,8 +199,11 @@ constructor(
 
 openCameraDialog(preguntaNumber:number): void {
   const dialogRef = this.dialog.open(CameraCaptureComponent, {
-    width: '98%',
-    height: '100%'
+    panelClass: 'full-screen-dialog', // Aplicará una clase personalizada
+    width: '100vw',
+    height: '100vh',
+    maxWidth: '100vw',
+    maxHeight: '100vh'
   });
 
   dialogRef.afterClosed().subscribe(async (result: string | undefined) => {
