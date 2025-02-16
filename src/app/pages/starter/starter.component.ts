@@ -199,8 +199,8 @@ constructor(
 
 openCameraDialog(preguntaNumber:number): void {
   const dialogRef = this.dialog.open(CameraCaptureComponent, {
-    width: '90%',
-    height: '70%'
+    width: '98%',
+    height: '100%'
   });
 
   dialogRef.afterClosed().subscribe(async (result: string | undefined) => {
@@ -316,7 +316,7 @@ openCameraDialog(preguntaNumber:number): void {
     }
   });
 }
-openCameraDialogFigure(preguntaNumber:number): void {
+/*openCameraDialogFigure(preguntaNumber:number): void {
   const dialogRef = this.dialog.open(CameraCaptureFigureComponent, {
     width: '90%',
     height: '70%'
@@ -439,7 +439,7 @@ openCameraDialogFigure(preguntaNumber:number): void {
   });
 
 }
-
+*/
 requestLocationAccess(): void {
   const userConfirmed = confirm('Necesitamos tu ubicación para brindarte un mejor servicio.');
   if (userConfirmed) {
@@ -723,7 +723,7 @@ get ReactiveFrmCatorceFormGroup() {
       confirmButtonColor: "#5d87ff",
     }).then((result) => {
       if (result.isConfirmed) {
-        this.openCameraDialogFigure(3);
+        this.openCameraDialog(3);
       } else if (result.isDenied) {
         localStorage.clear();
         this.router.navigate(['/authentication/login']);
@@ -771,7 +771,7 @@ get ReactiveFrmCatorceFormGroup() {
     });
 
       if (result.isConfirmed) {
-        this.openCameraDialogFigure(4);
+        this.openCameraDialog(4);
         popupstate =false;
       } else if (result.isDenied) {
         popupstate =true;
@@ -821,7 +821,7 @@ get ReactiveFrmCatorceFormGroup() {
     });
 
       if (result.isConfirmed) {
-        this.openCameraDialogFigure(5);
+        this.openCameraDialog(5);
         popupstate =false;
       } else if (result.isDenied) {
         popupstate =true;
@@ -875,7 +875,7 @@ get ReactiveFrmCatorceFormGroup() {
     });
 
       if (result.isConfirmed) {
-        this.openCameraDialogFigure(6);
+        this.openCameraDialog(6);
         popupstate =false;
       } else if (result.isDenied) {
         popupstate =true;
@@ -927,7 +927,7 @@ get ReactiveFrmCatorceFormGroup() {
     });
 
       if (result.isConfirmed) {
-        this.openCameraDialogFigure(7);
+        this.openCameraDialog(7);
         popupstate =false;
       } else if (result.isDenied) {
         popupstate =true;
@@ -1060,7 +1060,7 @@ get ReactiveFrmCatorceFormGroup() {
     });
 
       if (result.isConfirmed) {
-        this.openCameraDialogFigure(12);
+        this.openCameraDialog(12);
         popupstate =false;
       } else if (result.isDenied) {
         popupstate =true;
@@ -1110,7 +1110,7 @@ get ReactiveFrmCatorceFormGroup() {
     });
 
       if (result.isConfirmed) {
-        this.openCameraDialogFigure(13);
+        this.openCameraDialog(13);
         popupstate =false;
       } else if (result.isDenied) {
         popupstate =true;
