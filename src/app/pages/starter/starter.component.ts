@@ -201,9 +201,9 @@ openCameraDialog(preguntaNumber:number): void {
   const dialogRef = this.dialog.open(CameraCaptureComponent, {
     panelClass: 'full-screen-dialog', // Aplicará una clase personalizada
     width: '100vw',
-    height: '100vh',
+    height: '90vh',
     maxWidth: '100vw',
-    maxHeight: '100vh'
+    maxHeight: '90vh'
   });
 
   dialogRef.afterClosed().subscribe(async (result: string | undefined) => {
