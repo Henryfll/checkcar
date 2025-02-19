@@ -2,11 +2,12 @@ import { Component, ElementRef, ViewChild, OnInit, Output, EventEmitter } from '
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogRef } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-camera-capture',
   standalone: true,
-  imports: [MatCardModule,MatButtonModule],
+  imports: [MatCardModule,MatButtonModule,MatIcon],
   templateUrl: './camera-capture.component.html',
   styleUrl: './camera-capture.component.scss'
 })
