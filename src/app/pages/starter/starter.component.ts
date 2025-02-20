@@ -718,7 +718,7 @@ get ReactiveFrmCatorceFormGroup() {
  async analizarTerceraPregunta():Promise<boolean>{
   let observacion= await this._chatGptService.placaYVin(this.matriculaFrontalPhoto??'');
   alert("matricu:"+observacion.placa+"-"+observacion.vin);
-  if(observacion.placa == "ABC123"){
+ /* if(observacion.placa == "ABC123"){
     Swal.fire({
       title:"<p style='line-height: 1.5;'>Error en la foto, desea tomar una nueva foto o detener el registro?</p>",
       showDenyButton: true,
@@ -736,7 +736,7 @@ get ReactiveFrmCatorceFormGroup() {
     });
     this.matriculaFrontalPhoto=null;
     return false;
-  }
+  }*/
   this.placa=observacion.placa;
   this.vin=observacion.vin;
   return true;
