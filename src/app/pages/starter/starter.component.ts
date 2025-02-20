@@ -173,8 +173,8 @@ firmaPhoto:string | null = null;
 
 listaAccesorios:Accesorio[]=[];
 columnsAccesorios: string[] = ['foto', 'valor', 'descripcion'];
-placa:string;
-vin:string;
+//placa:string;
+//vin:string;
 
 latitud:string;
 longitud:string;
@@ -717,8 +717,7 @@ get ReactiveFrmCatorceFormGroup() {
  }
  async analizarTerceraPregunta():Promise<boolean>{
   let observacion= await this._chatGptService.placaYVin(this.matriculaFrontalPhoto??'');
-  alert("matricu:"+observacion.placa+"-"+observacion.vin);
- /* if(observacion.placa == "ABC123"){
+ if(observacion == false){
     Swal.fire({
       title:"<p style='line-height: 1.5;'>Error en la foto, desea tomar una nueva foto o detener el registro?</p>",
       showDenyButton: true,
@@ -736,9 +735,9 @@ get ReactiveFrmCatorceFormGroup() {
     });
     this.matriculaFrontalPhoto=null;
     return false;
-  }*/
-  this.placa=observacion.placa;
-  this.vin=observacion.vin;
+  }
+ // this.placa=observacion.placa;
+ // this.vin=observacion.vin;
   return true;
  }
  async guardarCuartaPregunta() {
@@ -813,7 +812,7 @@ get ReactiveFrmCatorceFormGroup() {
   }
  }
  async analizarQuintaPregunta():Promise<boolean>{
-  let observacion= await this._chatGptService.coincideVIN(this.chasisPhoto??'',this.vin);
+  let observacion= await this._chatGptService.coincideVIN(this.chasisPhoto??'',null);
   if(observacion == false){
     let popupstate:boolean=false;
     const result = await Swal.fire({
@@ -867,7 +866,7 @@ get ReactiveFrmCatorceFormGroup() {
  }
 
  async analizarSextaPregunta():Promise<boolean>{
-  let observacion= await this._chatGptService.comprobarPlaca(this.frontalVehiculoPhoto??'',this.placa);
+  let observacion= await this._chatGptService.comprobarPlaca(this.frontalVehiculoPhoto??'');
   if(observacion == false){
     let popupstate:boolean=false;
     const result = await Swal.fire({
@@ -919,11 +918,11 @@ get ReactiveFrmCatorceFormGroup() {
 
  }
  async analizarSeptimaPregunta():Promise<boolean>{
-  let observacion= await this._chatGptService.comprobarPlaca(this.posteriorVehiculoPhoto??'',this.placa);
+  let observacion= await this._chatGptService.comprobarFotoPosteriorVehiculo(this.posteriorVehiculoPhoto??'');
   if(observacion == false){
     let popupstate:boolean=false;
     const result = await Swal.fire({
-      title: "<p style='line-height: 1.5;'>Error las placas no coinciden</p>",
+      title: "<p style='line-height: 1.5;'>Error la imagen no corresponde a la parte posterior del vehículo</p>",
       showDenyButton: true,
       confirmButtonText: "Nueva Foto",
       denyButtonText: "Continuar Registro",

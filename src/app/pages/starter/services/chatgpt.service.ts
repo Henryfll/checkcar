@@ -52,17 +52,8 @@ export class ChatgptService {
   }
 
   // Función para obtener placa y VIN
-  async placaYVin(base64Image: string): Promise<{ placa: string; vin: string }> {
-    const response = await this.questionAboutImage(
-      base64Image,
-      'Este es un documento, es una matricula de un auto?'
-    );
-    alert("chatgpt::"+response);
-    const match = response.match(/La placa actual es: (\w+) y el número VIN es: (\w+)/i);
-    if (match) {
-      return { placa: match[1], vin: match[2] };
-    }
-    return { placa: 'ABC123', vin: '123456789' };
+  async placaYVin(base64Image: string): Promise<boolean> {
+    return this.yesNoQuestionAboutImage(base64Image, '¿Este es un documento, es una matricula de un auto?');
   }
 
 
@@ -72,13 +63,19 @@ export class ChatgptService {
 
   async coincideVIN(base64Image: string, vin: string | null): Promise<boolean> {
     if (!vin) return true;
-    return this.yesNoQuestionAboutImage(base64Image, `Responde con sí o no si el VIN es ${vin}`);
+    return this.yesNoQuestionAboutImage(base64Image, `Responde con sí o no si la imagen tiene un código`);
   }
 
-  async comprobarPlaca(base64Image: string, placa: string): Promise<boolean> {
+  async comprobarPlaca(base64Image: string): Promise<boolean> {
     return this.yesNoQuestionAboutImage(
       base64Image,
-      `Responde sí o no si la placa es ${placa} es igual a la placa de la foto`
+      `Responde sí o no si la imagen corresponde a la parte frontal de un vehículo`
+    );
+  }
+  async comprobarFotoPosteriorVehiculo(base64Image: string): Promise<boolean> {
+    return this.yesNoQuestionAboutImage(
+      base64Image,
+      `Responde sí o no si la imagen corresponde a la parte posterior de un vehículo`
     );
   }
 
