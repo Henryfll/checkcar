@@ -55,7 +55,7 @@ export class ChatgptService {
   async placaYVin(base64Image: string): Promise<{ placa: string; vin: string }> {
     const response = await this.questionAboutImage(
       base64Image,
-      'Obtén el NÚMERO VIN. Devuelve el resultado en el formato: el número VIN es: 123456789.'
+      'Este es un documento, es una matricula de un auto?'
     );
     alert("chatgpt::"+response);
     const match = response.match(/La placa actual es: (\w+) y el número VIN es: (\w+)/i);
