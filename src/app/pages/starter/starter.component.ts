@@ -90,6 +90,10 @@ export class StarterComponent {
   sextoFormGroup = this._formBuilder.group({
     frontalVehiculo: ['', Validators.required],
   });
+//Muchas gracias, ahora por favor toma una fotografía de la parte lateral derecha del vehículo, asegúrate que en la fotografía se vean los faros delanteros y traseros.
+sextosextoFormGroup = this._formBuilder.group({
+  derechaVehiculo: ['', Validators.required],
+});
 //Muchas gracias, ahora por favor toma una fotografía de la parte posterior del vehículo, asegúrate que en la imagen se vean los faros posteriores.
   septimoFormGroup = this._formBuilder.group({
     posteriorVehiculo: ['', Validators.required],
@@ -98,6 +102,7 @@ export class StarterComponent {
   octavoFormGroup = this._formBuilder.group({
     izquierdaVehiculo: ['', Validators.required],
   });
+
 //Ahora, por favor toma una fotografía del tablero del vehículo, allí podrás ver desde el volante hasta la guantera en una sola imagen.
 novenoFormGroup = this._formBuilder.group({
   tableroVehiculo: ['', Validators.required],
@@ -160,6 +165,7 @@ chasisPhoto: string | null = null;
 frontalVehiculoPhoto: string | null = null;
 posteriorVehiculoPhoto:string | null = null;
 izquierdaVehiculoPhoto:string | null = null;
+derechaVehiculoPhoto:string | null = null;
 tableroVehiculoPhoto:string | null = null;
 panelVehiculoPhoto:string | null = null;
 tacometroVehiculoPhoto:string | null = null;
@@ -244,6 +250,10 @@ openCameraDialog(preguntaNumber:number): void {
             this.sextoFormGroup.get('frontalVehiculo')?.setValue(result);
           }
           this.spinner.hide();
+          break;
+        case 66:
+          this.derechaVehiculoPhoto = result;
+          this.sextosextoFormGroup.get('derechaVehiculo')?.setValue(result);
           break;
         case 7:
           this.spinner.show();
@@ -894,6 +904,26 @@ get ReactiveFrmCatorceFormGroup() {
   }
   return true;
  }
+ async guardarSextaSextaPregunta() {
+  let imagen=this.sextosextoFormGroup.get("derechaVehiculo")?.value;
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 7",
+    "imagen":imagen,
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
+  };
+  try {
+    const respuesta = await this._formService.guardarInspeccion(pregunta);
+    return { mensaje: 'Q7 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q7:', error);
+    return { mensaje: 'Error Q7'};
+  }
+ }
  async guardarSeptimaPregunta() {
   let imagen=this.septimoFormGroup.get("posteriorVehiculo")?.value??'';
 
@@ -901,7 +931,7 @@ get ReactiveFrmCatorceFormGroup() {
       "cedula":this.cedula,
       "aseguradora":this.aseguradora,
       "nro_caso":this.caso,
-      "seccion":"Seccion 7",
+      "seccion":"Seccion 8",
       "imagen":imagen,
       "observacion":"",
       "fecha": (new Date).toDateString,
@@ -910,10 +940,10 @@ get ReactiveFrmCatorceFormGroup() {
     };
     try {
       const respuesta = await this._formService.guardarInspeccion(pregunta);
-      return { mensaje: 'Q7 OK', respuesta: respuesta };
+      return { mensaje: 'Q8 OK', respuesta: respuesta };
     } catch (error) {
-      console.error('Error en Q7:', error);
-      return { mensaje: 'Error Q7'};
+      console.error('Error en Q8:', error);
+      return { mensaje: 'Error Q8'};
     }
 
  }
@@ -952,27 +982,6 @@ get ReactiveFrmCatorceFormGroup() {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
-    "seccion":"Seccion 8",
-    "imagen":imagen,
-    "fecha": (new Date).toDateString,
-    "latitud":this.latitud,
-    "longitud":this.longitud,
-  };
-  try {
-    const respuesta = await this._formService.guardarInspeccion(pregunta);
-    return { mensaje: 'Q8 OK', respuesta: respuesta };
-  } catch (error) {
-    console.error('Error en Q8:', error);
-    return { mensaje: 'Error Q8'};
-  }
- }
-
- async guardarNovenaPregunta() {
-  let imagen=this.octavoFormGroup.get("tableroVehiculo")?.value;
-  const pregunta = {
-    "cedula":this.cedula,
-    "aseguradora":this.aseguradora,
-    "nro_caso":this.caso,
     "seccion":"Seccion 9",
     "imagen":imagen,
     "fecha": (new Date).toDateString,
@@ -987,8 +996,9 @@ get ReactiveFrmCatorceFormGroup() {
     return { mensaje: 'Error Q9'};
   }
  }
- async guardarDecimaPregunta() {
-  let imagen=this.decimoFormGroup.get("panelVehiculo")?.value;
+
+ async guardarNovenaPregunta() {
+  let imagen=this.octavoFormGroup.get("tableroVehiculo")?.value;
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
@@ -1007,9 +1017,8 @@ get ReactiveFrmCatorceFormGroup() {
     return { mensaje: 'Error Q10'};
   }
  }
-
- async guardarOncePregunta() {
-  let imagen=this.onceFormGroup.get("tacometroVehiculo")?.value;
+ async guardarDecimaPregunta() {
+  let imagen=this.decimoFormGroup.get("panelVehiculo")?.value;
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
@@ -1029,15 +1038,14 @@ get ReactiveFrmCatorceFormGroup() {
   }
  }
 
- async guardarDocePregunta() {
-  let imagen=this.doceFormGroup.get("cedula")?.value??'';
+ async guardarOncePregunta() {
+  let imagen=this.onceFormGroup.get("tacometroVehiculo")?.value;
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 12",
     "imagen":imagen,
-    "observacion":"",
     "fecha": (new Date).toDateString,
     "latitud":this.latitud,
     "longitud":this.longitud,
@@ -1048,6 +1056,28 @@ get ReactiveFrmCatorceFormGroup() {
   } catch (error) {
     console.error('Error en Q12:', error);
     return { mensaje: 'Error Q12'};
+  }
+ }
+
+ async guardarDocePregunta() {
+  let imagen=this.doceFormGroup.get("cedula")?.value??'';
+  const pregunta = {
+    "cedula":this.cedula,
+    "aseguradora":this.aseguradora,
+    "nro_caso":this.caso,
+    "seccion":"Seccion 13",
+    "imagen":imagen,
+    "observacion":"",
+    "fecha": (new Date).toDateString,
+    "latitud":this.latitud,
+    "longitud":this.longitud,
+  };
+  try {
+    const respuesta = await this._formService.guardarInspeccion(pregunta);
+    return { mensaje: 'Q13 OK', respuesta: respuesta };
+  } catch (error) {
+    console.error('Error en Q13:', error);
+    return { mensaje: 'Error Q13'};
   }
  }
  async analizarDocePregunta():Promise<boolean>{
@@ -1085,7 +1115,7 @@ get ReactiveFrmCatorceFormGroup() {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
-    "seccion":"Seccion 13",
+    "seccion":"Seccion 14",
     "imagen":imagen,
     "observacion":"",
     "fecha": (new Date).toDateString,
@@ -1094,10 +1124,10 @@ get ReactiveFrmCatorceFormGroup() {
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
-    return { mensaje: 'Q13 OK', respuesta: respuesta };
+    return { mensaje: 'Q14 OK', respuesta: respuesta };
   } catch (error) {
-    console.error('Error en Q13:', error);
-    return { mensaje: 'Error Q13'};
+    console.error('Error en Q14:', error);
+    return { mensaje: 'Error Q14'};
   }
  }
  async analizarTrecePregunta():Promise<boolean>{
@@ -1135,7 +1165,7 @@ get ReactiveFrmCatorceFormGroup() {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
-    "seccion":"Seccion 14",
+    "seccion":"Seccion 15",
     "observacion":tieneAc,
     "fecha": (new Date).toDateString,
     "latitud":this.latitud,
@@ -1143,10 +1173,10 @@ get ReactiveFrmCatorceFormGroup() {
   };
   try {
     const respuesta = await this._formService.guardarObservacion(pregunta);
-    return { mensaje: 'Q14 OK', respuesta: respuesta };
+    return { mensaje: 'Q15 OK', respuesta: respuesta };
   } catch (error) {
-    console.error('Error en Q14:', error);
-    return { mensaje: 'Error Q14'};
+    console.error('Error en Q15:', error);
+    return { mensaje: 'Error Q15'};
   }
  }
 
@@ -1156,7 +1186,7 @@ get ReactiveFrmCatorceFormGroup() {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
-    "seccion":"Seccion 15",
+    "seccion":"Seccion 16",
     "observacion":this.listaAccesorios,
     "fecha": (new Date).toDateString,
     "latitud":this.latitud,
@@ -1164,10 +1194,10 @@ get ReactiveFrmCatorceFormGroup() {
   };
   try {
     const respuesta = await this._formService.guardarAccesorios(pregunta);
-    return { mensaje: 'Q15 OK', respuesta: respuesta };
+    return { mensaje: 'Q16 OK', respuesta: respuesta };
   } catch (error) {
-    console.error('Error en Q15:', error);
-    return { mensaje: 'Error Q15'};
+    console.error('Error en Q16:', error);
+    return { mensaje: 'Error Q16'};
   }
  }
 
@@ -1177,7 +1207,7 @@ get ReactiveFrmCatorceFormGroup() {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
-    "seccion":"Seccion 16",
+    "seccion":"Seccion 17",
     "observacion":tieneDaniosVehiculo,
     "fecha": (new Date).toDateString,
     "latitud":this.latitud,
@@ -1185,10 +1215,10 @@ get ReactiveFrmCatorceFormGroup() {
   };
   try {
     const respuesta = await this._formService.guardarObservacion(pregunta);
-    return { mensaje: 'Q18 OK', respuesta: respuesta };
+    return { mensaje: 'Q17 OK', respuesta: respuesta };
   } catch (error) {
-    console.error('Error en Q18:', error);
-    return { mensaje: 'Error Q18'};
+    console.error('Error en Q17:', error);
+    return { mensaje: 'Error Q17'};
   }
  }
  async guardarChoquePregunta() {
@@ -1198,7 +1228,7 @@ get ReactiveFrmCatorceFormGroup() {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
-    "seccion":"Seccion 17",
+    "seccion":"Seccion 18",
     "observacion":{
       "nombre":problemaVehiculo,
       "imagen":imagen,
@@ -1210,10 +1240,10 @@ get ReactiveFrmCatorceFormGroup() {
   };
   try {
     const respuesta = await this._formService.guardarChoque(pregunta);
-    return { mensaje: 'Q19 OK', respuesta: respuesta };
+    return { mensaje: 'Q18 OK', respuesta: respuesta };
   } catch (error) {
-    console.error('Error en Q19:', error);
-    return { mensaje: 'Error Q19'};
+    console.error('Error en Q18:', error);
+    return { mensaje: 'Error Q18'};
   }
  }
  async guardarFormulario() {
