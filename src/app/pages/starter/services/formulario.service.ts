@@ -19,6 +19,7 @@ export class FormularioService {
   ) { }
 
 
+
    buscarJuntasCedulaCelular(cedula: string, celular:string) {
     const jsonEnvio = {
       cedula: cedula,
