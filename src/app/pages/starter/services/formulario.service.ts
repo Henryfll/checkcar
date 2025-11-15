@@ -16,72 +16,13 @@ export class FormularioService {
     public _http:HttpClient
   ) { }
 
-  /*guardarInspeccion(inspeccion:any){
-    let jsonEnvio={
-      "cedula":inspeccion.cedula,
-      "aseguradora":inspeccion.aseguradora,
-      "nro_caso":inspeccion.nro_caso,
-      "seccion":inspeccion.seccion,
-      "imagen":inspeccion.imagen
-    };
 
-   return this._http.post(this.url,jsonEnvio);
-  }
-
-  guardarObservacion(inspeccion:any){
-    let jsonEnvio={
-      "cedula":inspeccion.cedula,
-      "aseguradora":inspeccion.aseguradora,
-      "nro_caso":inspeccion.nro_caso,
-      "seccion":inspeccion.seccion,
-      "observacion":inspeccion.observacion
-    };
-
-   return this._http.post(this.url,jsonEnvio);
-  }
-  guardarAccesorios(inspeccion:any){
-    let jsonEnvio={
-      "cedula":inspeccion.cedula,
-      "aseguradora":inspeccion.aseguradora,
-      "nro_caso":inspeccion.nro_caso,
-      "seccion":inspeccion.seccion,
-      "observacion":inspeccion.accesorios
-    };
-
-   return this._http.post(this.url,jsonEnvio);
-  }
-
-  guardarChoque(inspeccion:any){
-    let jsonEnvio={
-      "cedula":inspeccion.cedula,
-      "aseguradora":inspeccion.aseguradora,
-      "nro_caso":inspeccion.nro_caso,
-      "seccion":inspeccion.seccion,
-      "observacion":{
-        "nombre":inspeccion.obsnombre,
-		    "imagen":inspeccion.obsimagen,
-		    "precio":inspeccion.obsprecio
-      }
-    };
-
-   return this._http.post(this.url,jsonEnvio);
-  }
-  finalizarInspeccion(inspeccion:any){
-    let jsonEnvio={
-      "cedula":inspeccion.cedula,
-      "aseguradora":inspeccion.aseguradora,
-      "nro_caso":inspeccion.nro_caso
-    };
-
-   return this._http.post(this.url,jsonEnvio);
-  }*/
    guardarInspeccion(inspeccion: any): Promise<any> {
     const jsonEnvio = {
       cedula: inspeccion.cedula,
       aseguradora: inspeccion.aseguradora,
       nro_caso: inspeccion.nro_caso,
       seccion: inspeccion.seccion,
-      imagen: inspeccion.imagen,
       observacion: inspeccion.observacion,
       fechaHora: inspeccion.fecha,
       latitud:inspeccion.latitud,
@@ -101,7 +42,8 @@ export class FormularioService {
       fechaHora: inspeccion.fecha,
       latitud:inspeccion.latitud,
       longitud:inspeccion.longitud,
-      precio:inspeccion.precio
+      precio:inspeccion.precio,
+      imagen: inspeccion.imagen
     };
     return lastValueFrom(this._http.post(this.url, jsonEnvio));
   }
@@ -112,7 +54,7 @@ export class FormularioService {
       aseguradora: inspeccion.aseguradora,
       nro_caso: inspeccion.nro_caso,
       seccion: inspeccion.seccion,
-      observacion: inspeccion.accesorios,
+      observacion: inspeccion.observacion,
       fechaHora: inspeccion.fecha,
       latitud:inspeccion.latitud,
       longitud:inspeccion.longitud,
@@ -127,11 +69,7 @@ export class FormularioService {
       aseguradora: inspeccion.aseguradora,
       nro_caso: inspeccion.nro_caso,
       seccion: inspeccion.seccion,
-      observacion: {
-        nombre: inspeccion.obsnombre,
-        imagen: inspeccion.obsimagen,
-        precio: inspeccion.obsprecio,
-      },
+      observacion: inspeccion.observacion,
       fechaHora: inspeccion.fecha,
       latitud:inspeccion.latitud,
       longitud:inspeccion.longitud,
@@ -145,6 +83,13 @@ export class FormularioService {
       cedula: inspeccion.cedula,
       aseguradora: inspeccion.aseguradora,
       nro_caso: inspeccion.nro_caso,
+      seccion: inspeccion.seccion,
+      imagen: inspeccion.imagen,
+      observacion: inspeccion.observacion,
+      fechaHora: inspeccion.fecha,
+      latitud:inspeccion.latitud,
+      longitud:inspeccion.longitud,
+      precio:inspeccion.precio
     };
     return lastValueFrom(this._http.post(this.url, jsonEnvio));
   }

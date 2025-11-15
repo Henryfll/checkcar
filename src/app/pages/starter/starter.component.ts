@@ -11,14 +11,14 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatStepperModule } from '@angular/material/stepper';
 import { CameraCaptureComponent } from 'src/app/components/camera-capture/camera-capture.component';
 import { Accesorio } from './interfaces/accesorio';
-import { MatTableModule } from '@angular/material/table';
-import { CameraCaptureFigureComponent } from 'src/app/components/camera-capture-figure/camera-capture-figure.component';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { FormularioService } from './services/formulario.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { ChatgptService } from './services/chatgpt.service';
 import { NgxSpinnerService } from "ngx-spinner";
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { Danio } from './interfaces/danio';
 
 @Component({
   selector: 'app-starter',
@@ -144,6 +144,12 @@ diezochoFormGroup = this._formBuilder.group({
   tieneDaniosVehiculo: ['', Validators.required],
 });
 
+//nuevo accesorio
+nuevoDanioFormGroup = this._formBuilder.group({
+  fotoDanio: ['', Validators.required], //Por favor, toma una foto .
+  descripcionDanio: ['', Validators.required]//Por favor, agregue la descripción.
+});
+
 //Muchas gracias, ahora ingrese una foto del daño del vehículo.
 diezNueveFormGroup = this._formBuilder.group({
   danioVehiculo: ['', Validators.required],
@@ -173,12 +179,18 @@ cedulaPhoto:string | null = null;
 licenciaPhoto:string | null = null;
 danioVehiculoPhoto:string | null = null;
 nuevoAccesorioPhoto:string | null = null;
+nuevoDanioPhoto:string | null = null;
 contratoPhoto:string | null = null;
 firmaPhoto:string | null = null;
 
 
 listaAccesorios:Accesorio[]=[];
+listaAcessoriosMatTable = new MatTableDataSource<Accesorio>([]);
 columnsAccesorios: string[] = ['foto', 'valor', 'descripcion'];
+
+listaDanios:Danio[]=[];
+listaDaniosMatTable = new MatTableDataSource<Danio>([]);
+columnsDanios: string[] = ['foto', 'descripcion'];
 //placa:string;
 //vin:string;
 
@@ -303,8 +315,8 @@ openCameraDialog(preguntaNumber:number): void {
           this.nuevoAccesorioFormGroup.get('fotoAccesorio')?.setValue(result);
           break;
         case 19:
-          this.danioVehiculoPhoto = result;
-          this.diezNueveFormGroup.get('danioVehiculo')?.setValue(result);
+          this.nuevoDanioPhoto = result;
+          this.nuevoDanioFormGroup.get('fotoDanio')?.setValue(result);
           break;
         case 21:
           this.spinner.show();
@@ -329,130 +341,7 @@ openCameraDialog(preguntaNumber:number): void {
     }
   });
 }
-/*openCameraDialogFigure(preguntaNumber:number): void {
-  const dialogRef = this.dialog.open(CameraCaptureFigureComponent, {
-    width: '90%',
-    height: '70%'
-  });
 
-  dialogRef.afterClosed().subscribe(async (result: string | undefined) => {
-    if (result) {
-      switch (preguntaNumber){
-        case 3:
-          this.spinner.show();
-          this.matriculaFrontalPhoto = result;
-          let fotoMatriculaFrontal = await this.analizarTerceraPregunta();
-          if(fotoMatriculaFrontal){
-            this.terceroFormGroup.get('matriculaFrontal')?.setValue(result);
-          }
-          this.spinner.hide();
-          break;
-        case 4:
-          this.spinner.show();
-          this.matriculaPosteriorPhoto = result;
-          let fotoMatriculaPosterior = await this.analizarCuartaPregunta();
-          if(fotoMatriculaPosterior){
-            this.cuartoFormGroup.get('matriculaPosterior')?.setValue(result);
-          }
-          this.spinner.hide();
-          break;
-        case 5:
-          this.spinner.show();
-          this.chasisPhoto = result;
-          let fotoChasis = await this.analizarQuintaPregunta();
-          if(fotoChasis){
-            this.quintoFormGroup.get('chasis')?.setValue(result);
-          }
-          this.spinner.hide();
-          break;
-        case 6:
-          this.spinner.show();
-          this.frontalVehiculoPhoto = result;
-          let fotoVehiculoFrontal = await this.analizarSextaPregunta();
-          if(fotoVehiculoFrontal){
-            this.sextoFormGroup.get('frontalVehiculo')?.setValue(result);
-          }
-          this.spinner.hide();
-          break;
-        case 7:
-          this.spinner.show();
-          this.posteriorVehiculoPhoto = result;
-          let fotoVehiculoPosterior = await this.analizarSeptimaPregunta();
-          if(fotoVehiculoPosterior){
-            this.septimoFormGroup.get('posteriorVehiculo')?.setValue(result);
-          }else{
-            localStorage.clear();
-            this.router.navigate(['/authentication/login']);
-          }
-          this.spinner.hide();
-          break;
-        case 8:
-          this.izquierdaVehiculoPhoto = result;
-          this.octavoFormGroup.get('izquierdaVehiculo')?.setValue(result);
-          break;
-        case 9:
-          this.tableroVehiculoPhoto = result;
-          this.novenoFormGroup.get('tableroVehiculo')?.setValue(result);
-          break;
-        case 10:
-          this.panelVehiculoPhoto = result;
-          this.decimoFormGroup.get('panelVehiculo')?.setValue(result);
-          break;
-        case 11:
-          this.tacometroVehiculoPhoto = result;
-          this.onceFormGroup.get('tacometroVehiculo')?.setValue(result);
-          break;
-        case 12:
-          this.spinner.show();
-          this.cedulaPhoto = result;
-          let fotoCedula = await this.analizarDocePregunta();
-          if(fotoCedula){
-            this.doceFormGroup.get('cedula')?.setValue(result);
-          }
-          this.spinner.hide();
-          break;
-        case 13:
-          this.spinner.show();
-          this.licenciaPhoto = result;
-          let fotoLicencia = await this.analizarDocePregunta();
-          if(fotoLicencia){
-            this.treceFormGroup.get('licencia')?.setValue(result);
-          }
-          this.spinner.hide();
-          break;
-        case 14:
-          this.nuevoAccesorioPhoto = result;
-          this.nuevoAccesorioFormGroup.get('fotoAccesorio')?.setValue(result);
-          break;
-        case 19:
-          this.danioVehiculoPhoto = result;
-          this.diezNueveFormGroup.get('danioVehiculo')?.setValue(result);
-          break;
-        case 21:
-          this.spinner.show();
-          this.contratoPhoto = result;
-          let fotoContrado = await this.analizarSegundaUnaSiUnaPregunta();
-          if(fotoContrado){
-            this.segundoUnoSiUnoFormGroup.get('fotoContrato')?.setValue(result);
-          }
-          this.spinner.hide();
-          break;
-        case 22:
-          this.spinner.show()
-          this.firmaPhoto = result;
-          let fotoFirmas = await this.analizarSegundaUnaSiDosPregunta();
-          if(fotoFirmas){
-            this.segundoUnoSiDosFormGroup.get('fotoFirmas')?.setValue(result);
-          }
-          this.spinner.hide()
-          break;
-      }
-
-    }
-  });
-
-}
-*/
 requestLocationAccess(): void {
   const userConfirmed = confirm('Necesitamos tu ubicación para brindarte un mejor servicio.');
   if (userConfirmed) {
@@ -505,6 +394,25 @@ agregarAccesorio(){
   });
 
   this.nuevoAccesorioPhoto=null;
+    this.listaAcessoriosMatTable=new MatTableDataSource(this.listaAccesorios);
+}
+
+agregarDanio(){
+  let nuevoDanio:Danio={
+    imagen:this.nuevoDanioFormGroup.get('fotoDanio')?.value ?? '',
+    nombre:this.nuevoDanioFormGroup.get('descripcionDanio')?.value ?? '',
+    precio:0
+  };
+
+  this.listaDanios.push(nuevoDanio);
+
+  this.nuevoDanioFormGroup = this._formBuilder.group({
+    fotoDanio: ['', Validators.required], //Por favor, toma una foto del nuevo accesorio que deseas declarar.
+    descripcionDanio: ['', Validators.required]//Por favor, agregue la descripción del accesorio.
+  });
+
+  this.nuevoDanioPhoto=null;
+    this.listaDaniosMatTable=new MatTableDataSource(this.listaDanios);
 }
 get ReactiveFrmSegundoFormGroup() {
   return this.segundoFormGroup.controls;
@@ -533,7 +441,7 @@ get ReactiveFrmCatorceFormGroup() {
   this.longitud=this.primerFormGroup.get("longitude")?.value!;
 
   let Q1=await this.guardarPrimeraPregunta();
-  let Q2=await this.guardarPrimeraPregunta();
+  let Q2=await this.guardarSegundaPregunta();
   if(matriculaNombreDelTomador==="No"){
     let Q21=await this.guardarSegundaUnaPregunta();
     if (tieneContrato==="Si") {
@@ -545,17 +453,7 @@ get ReactiveFrmCatorceFormGroup() {
   let Q4=await this.guardarCuartaPregunta();
   let Q5=await this.guardarQuintaPregunta();
   let Q6=await this.guardarSextaPregunta();
-  //if (Q6=="Error Placa") {
-   // localStorage.clear();
-  //  this.router.navigate(['/authentication/login']);
-  //  Swal.fire('Placas no coinciden','','error');
- // }else{
     let Q7=await this.guardarSeptimaPregunta();
-   // if (Q7=="Error Placa") {
-     // localStorage.clear();
-     // this.router.navigate(['/authentication/login']);
-    //  Swal.fire('Placas no coinciden','','error');
-   // }else{
       let Q8=await this.guardarOctavaPregunta();
       let Q9=await this.guardarNovenaPregunta();
       let Q10=await this.guardarDecimaPregunta();
@@ -566,7 +464,7 @@ get ReactiveFrmCatorceFormGroup() {
       if (tieneAc=="Si") {
         let Q15= await this.guardarAccesoriosPregunta();
       }
-      let Q18=this.guardarDiezochoPregunta();
+      let Q18=await this.guardarDiezochoPregunta();
       if (tieneDaniosVehiculo=="Si") {
         let Q19= await this.guardarChoquePregunta();
       }
@@ -574,9 +472,30 @@ get ReactiveFrmCatorceFormGroup() {
       this.spinner.hide();
       localStorage.clear();
         this.router.navigate(['/authentication/login']);
-        Swal.fire('Formulario Guardado','','info');
-    //}
-  //}
+      if(
+        Q1.respuesta.respuesta==true &&
+        Q2.respuesta.respuesta==true &&
+        Q3.respuesta.respuesta==true &&
+        Q4.respuesta.respuesta==true &&
+        Q5.respuesta.respuesta==true &&
+        Q6.respuesta.respuesta==true &&
+        Q7.respuesta.respuesta==true &&
+        Q8.respuesta.respuesta==true &&
+        Q9.respuesta.respuesta==true &&
+        Q10.respuesta.respuesta==true &&
+        Q11.respuesta.respuesta==true &&
+        Q12.respuesta.respuesta==true &&
+        Q13.respuesta.respuesta==true &&
+        Q14.respuesta.respuesta==true &&
+        Q18.respuesta.respuesta==true &&
+        fin.respuesta.respuesta==true
+      ){
+         Swal.fire('Formulario Guardado','','info');
+      }else{
+         Swal.fire('Error al guardar formulario, intente nuevamente','','error');
+      }
+
+
 
  }
 
@@ -587,16 +506,31 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 1",
-    "observacion":`Latitud: ${this.latitud}, Longitud: ${this.longitud}`,
-    "fecha": (new Date).toDateString,
+    "observacion": [
+        {
+            "imagen": "",
+            "nombre": "",
+            "precio": 0
+        }
+    ],
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.guardarObservacion(pregunta);
-    return { mensaje: 'Q1 OK', respuesta:respuesta };
+    if(respuesta.respuesta==true){
+       return { mensaje: 'Q1 OK', respuesta:respuesta };
+    }else{
+      console.error('Error en Q1:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q1'};
+    }
+
   } catch (error) {
     console.error('Error en Q1:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q1'};
   }
  }
@@ -608,16 +542,32 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 2",
-    "observacion":`${matriculaNombreDelTomador}`,
-    "fecha": (new Date).toDateString,
+    "observacion":
+     [
+        {
+            "imagen": `${matriculaNombreDelTomador}`,
+            "nombre": "matricula",
+            "precio": 0
+        }
+    ]
+    ,
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.guardarObservacion(pregunta);
-    return { mensaje: 'Q2 OK', respuesta:respuesta };
+     if(respuesta.respuesta==true){
+       return { mensaje: 'Q2 OK', respuesta:respuesta };
+    }else{
+      console.error('Error en Q2:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q2'};
+    }
   } catch (error) {
     console.error('Error en Q2:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q2'};
   }
  }
@@ -628,16 +578,31 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 2.1",
-    "observacion":`${tieneContrato}`,
-    "fecha": (new Date).toDateString,
+    "observacion":
+    [
+        {
+            "imagen": "",
+            "nombre": `${tieneContrato}`,
+            "precio": 0
+        }
+    ],
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.guardarObservacion(pregunta);
-    return { mensaje: 'Q2.1 OK', respuesta:respuesta };
+    if(respuesta.respuesta==true){
+      return { mensaje: 'Q2.1 OK', respuesta:respuesta };
+    }else{
+      console.error('Error en Q2.1:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q2.1'};
+    }
   } catch (error) {
     console.error('Error en Q2.1:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q2.1'};
   }
  }
@@ -649,17 +614,30 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 2.1.1",
-    "imagen":imagen,
-    "observacion":"",
-    "fecha": (new Date).toDateString,
+    "observacion":[
+        {
+            "imagen": `${imagen}`,
+            "nombre": "contrato",
+            "precio": 0
+        }
+    ],
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
-    return { mensaje: 'Q2.1.1 OK', respuesta: respuesta };
+     if(respuesta.respuesta==true){
+      return { mensaje: 'Q2.1.1 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q2.1.1:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q2.1.1'};
+    }
   } catch (error) {
     console.error('Error en Q2.1.1:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q2.1.1'};
   }
  }
@@ -681,17 +659,30 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 2.1.2",
-    "imagen":imagen,
-    "observacion":"",
-    "fecha": (new Date).toDateString,
+    "observacion":[
+        {
+            "imagen": `${imagen}`,
+            "nombre": "firmas",
+            "precio": 0
+        }
+    ],
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
-    return { mensaje: 'Q2.1.2 OK', respuesta: respuesta };
+     if(respuesta.respuesta==true){
+      return { mensaje: 'Q2.1.2 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q2.1.2:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q2.1.2'};
+    }
   } catch (error) {
     console.error('Error en Q2.1.2:', error);
+     Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q2.1.2'};
   }
  }
@@ -711,17 +702,30 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 3",
-    "imagen":imagen,
-    "observacion":"",
-    "fecha": (new Date).toDateString,
+    "observacion":[
+        {
+            "imagen":  `${imagen}`,
+            "nombre": "matricula frontal",
+            "precio": 0
+        }
+    ],
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
-    return { mensaje: 'Q3 OK', respuesta: respuesta };
+    if(respuesta.respuesta==true){
+      return { mensaje: 'Q3 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q3:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q3'};
+    }
   } catch (error) {
     console.error('Error en Q3:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q3'};
   }
  }
@@ -757,17 +761,30 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 4",
-    "imagen":imagen,
-    "observacion":"",
-    "fecha": (new Date).toDateString,
+    "observacion":[
+        {
+            "imagen":  `${imagen}`,
+            "nombre": "matricula posterior",
+            "precio": 0
+        }
+    ],
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
-    return { mensaje: 'Q4 OK', respuesta: respuesta };
+    if(respuesta.respuesta==true){
+      return { mensaje: 'Q4 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q4:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q4'};
+    }
   } catch (error) {
     console.error('Error en Q4:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q4'};
   }
  }
@@ -807,17 +824,30 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 5",
-    "imagen":imagen,
-    "observacion":"",
-    "fecha": (new Date).toDateString,
+    "observacion":[
+        {
+            "imagen":  `${imagen}`,
+            "nombre": "chasis",
+            "precio": 0
+        }
+    ],
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
-    return { mensaje: 'Q5 OK', respuesta: respuesta };
+    if(respuesta.respuesta==true){
+      return { mensaje: 'Q5 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q5:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q5'};
+    }
   } catch (error) {
     console.error('Error en Q5:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q5'};
   }
  }
@@ -858,17 +888,30 @@ get ReactiveFrmCatorceFormGroup() {
       "aseguradora":this.aseguradora,
       "nro_caso":this.caso,
       "seccion":"Seccion 6",
-      "imagen":imagen,
-      "observacion":"",
-      "fecha": (new Date).toDateString,
+      "observacion":[
+        {
+            "imagen":  `${imagen}`,
+            "nombre": "frontal vehiculo",
+            "precio": 0
+        }
+    ],
+      "fecha": this.getCurrentDate(),
       "latitud":this.latitud,
       "longitud":this.longitud,
+      "precio":""
     };
     try {
       const respuesta = await this._formService.guardarInspeccion(pregunta);
+     if(respuesta.respuesta==true){
       return { mensaje: 'Q6 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q6:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q6'};
+    }
     } catch (error) {
       console.error('Error en Q6:', error);
+      Swal.fire("Error en el servicio",'','error');
       return { mensaje: 'Error Q6'};
     }
 
@@ -911,16 +954,30 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 7",
-    "imagen":imagen,
-    "fecha": (new Date).toDateString,
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":"",
+    "observacion":[
+        {
+            "imagen":  `${imagen}`,
+            "nombre": "derecha vehiculo",
+            "precio": 0
+        }
+    ]
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
-    return { mensaje: 'Q7 OK', respuesta: respuesta };
+   if(respuesta.respuesta==true){
+      return { mensaje: 'Q7 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q7:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q7'};
+    }
   } catch (error) {
     console.error('Error en Q7:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q7'};
   }
  }
@@ -932,17 +989,30 @@ get ReactiveFrmCatorceFormGroup() {
       "aseguradora":this.aseguradora,
       "nro_caso":this.caso,
       "seccion":"Seccion 8",
-      "imagen":imagen,
-      "observacion":"",
-      "fecha": (new Date).toDateString,
-    "latitud":this.latitud,
-    "longitud":this.longitud,
+      "observacion":[
+        {
+            "imagen": `${imagen}`,
+            "nombre": "posterior vehiculo",
+            "precio": 0
+        }
+    ],
+      "fecha": this.getCurrentDate(),
+      "latitud":this.latitud,
+      "longitud":this.longitud,
+      "precio":""
     };
     try {
       const respuesta = await this._formService.guardarInspeccion(pregunta);
+      if(respuesta.respuesta==true){
       return { mensaje: 'Q8 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q8:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q8'};
+    }
     } catch (error) {
       console.error('Error en Q8:', error);
+      Swal.fire("Error en el servicio",'','error');
       return { mensaje: 'Error Q8'};
     }
 
@@ -983,16 +1053,30 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 9",
-    "imagen":imagen,
-    "fecha": (new Date).toDateString,
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":"",
+    "observacion":[
+        {
+            "imagen":  `${imagen}`,
+            "nombre": "izquierda vehiculo",
+            "precio": 0
+        }
+    ]
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
-    return { mensaje: 'Q9 OK', respuesta: respuesta };
+    if(respuesta.respuesta==true){
+      return { mensaje: 'Q9 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q9:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q9'};
+    }
   } catch (error) {
     console.error('Error en Q9:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q9'};
   }
  }
@@ -1004,16 +1088,30 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 10",
-    "imagen":imagen,
-    "fecha": (new Date).toDateString,
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":"",
+    "observacion":[
+        {
+            "imagen":  `${imagen}`,
+            "nombre": "tablero",
+            "precio": 0
+        }
+    ]
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
-    return { mensaje: 'Q10 OK', respuesta: respuesta };
+    if(respuesta.respuesta==true){
+      return { mensaje: 'Q10 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q10:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q10'};
+    }
   } catch (error) {
     console.error('Error en Q10:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q10'};
   }
  }
@@ -1024,16 +1122,30 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 11",
-    "imagen":imagen,
-    "fecha": (new Date).toDateString,
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":"",
+    "observacion":[
+        {
+            "imagen": `${imagen}`,
+            "nombre": "Panel",
+            "precio": 0
+        }
+    ]
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
-    return { mensaje: 'Q11 OK', respuesta: respuesta };
+    if(respuesta.respuesta==true){
+      return { mensaje: 'Q11 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q11:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q11'};
+    }
   } catch (error) {
     console.error('Error en Q11:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q11'};
   }
  }
@@ -1045,16 +1157,30 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 12",
-    "imagen":imagen,
-    "fecha": (new Date).toDateString,
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":"",
+    "observacion":[
+        {
+            "imagen":  `${imagen}`,
+            "nombre": "tacometro",
+            "precio": 0
+        }
+    ]
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
-    return { mensaje: 'Q12 OK', respuesta: respuesta };
+     if(respuesta.respuesta==true){
+      return { mensaje: 'Q12 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q12:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q12'};
+    }
   } catch (error) {
     console.error('Error en Q12:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q12'};
   }
  }
@@ -1066,17 +1192,30 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 13",
-    "imagen":imagen,
-    "observacion":"",
-    "fecha": (new Date).toDateString,
+    "observacion":[
+        {
+            "imagen":  `${imagen}`,
+            "nombre": "cedula",
+            "precio": 0
+        }
+    ],
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
-    return { mensaje: 'Q13 OK', respuesta: respuesta };
+    if(respuesta.respuesta==true){
+      return { mensaje: 'Q13 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q13:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q13'};
+    }
   } catch (error) {
     console.error('Error en Q13:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q13'};
   }
  }
@@ -1116,17 +1255,30 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 14",
-    "imagen":imagen,
-    "observacion":"",
-    "fecha": (new Date).toDateString,
+    "observacion":[
+        {
+            "imagen":  `${imagen}`,
+            "nombre": "licencia",
+            "precio": 0
+        }
+    ],
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.guardarInspeccion(pregunta);
-    return { mensaje: 'Q14 OK', respuesta: respuesta };
+     if(respuesta.respuesta==true){
+      return { mensaje: 'Q14 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q14:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q14'};
+    }
   } catch (error) {
     console.error('Error en Q14:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q14'};
   }
  }
@@ -1166,16 +1318,30 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 15",
-    "observacion":tieneAc,
-    "fecha": (new Date).toDateString,
+    "observacion":[
+        {
+            "imagen": "",
+            "nombre":  `${tieneAc}`,
+            "precio": 0
+        }
+    ],
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.guardarObservacion(pregunta);
-    return { mensaje: 'Q15 OK', respuesta: respuesta };
+    if(respuesta.respuesta==true){
+      return { mensaje: 'Q15 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q15:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q15'};
+    }
   } catch (error) {
     console.error('Error en Q15:', error);
+      Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q15'};
   }
  }
@@ -1188,15 +1354,23 @@ get ReactiveFrmCatorceFormGroup() {
     "nro_caso":this.caso,
     "seccion":"Seccion 16",
     "observacion":this.listaAccesorios,
-    "fecha": (new Date).toDateString,
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.guardarAccesorios(pregunta);
-    return { mensaje: 'Q16 OK', respuesta: respuesta };
+    if(respuesta.respuesta==true){
+      return { mensaje: 'Q16 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q16:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q16'};
+    }
   } catch (error) {
     console.error('Error en Q16:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q16'};
   }
  }
@@ -1208,41 +1382,58 @@ get ReactiveFrmCatorceFormGroup() {
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 17",
-    "observacion":tieneDaniosVehiculo,
-    "fecha": (new Date).toDateString,
+    "observacion":[
+        {
+            "imagen": "",
+            "nombre":  `${tieneDaniosVehiculo}`,
+            "precio": 0
+        }
+    ],
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.guardarObservacion(pregunta);
-    return { mensaje: 'Q17 OK', respuesta: respuesta };
+     if(respuesta.respuesta==true){
+      return { mensaje: 'Q17 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q17:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q17'};
+    }
   } catch (error) {
     console.error('Error en Q17:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q17'};
   }
  }
  async guardarChoquePregunta() {
-  let imagen=this.diezNueveFormGroup.get("danioVehiculo")?.value;
-  let problemaVehiculo=this.veinteFormGroup.get("problemaVehiculo")?.value;
+
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
     "nro_caso":this.caso,
     "seccion":"Seccion 18",
-    "observacion":{
-      "nombre":problemaVehiculo,
-      "imagen":imagen,
-      "precio":"0"
-    },
-    "fecha": (new Date).toDateString,
+    "observacion":this.listaDanios,
+    "fecha": this.getCurrentDate(),
     "latitud":this.latitud,
     "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.guardarChoque(pregunta);
-    return { mensaje: 'Q18 OK', respuesta: respuesta };
+    if(respuesta.respuesta==true){
+      return { mensaje: 'Q18 OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Q18:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Q18'};
+    }
   } catch (error) {
     console.error('Error en Q18:', error);
+    Swal.fire("Error en el servicio",'','error');
     return { mensaje: 'Error Q18'};
   }
  }
@@ -1251,15 +1442,38 @@ get ReactiveFrmCatorceFormGroup() {
   const pregunta = {
     "cedula":this.cedula,
     "aseguradora":this.aseguradora,
-    "nro_caso":this.caso
+    "nro_caso":this.caso,
+    "seccion":"Fin de Registro",
+    "observacion":[{
+      "nombre":"",
+      "imagen":"",
+      "precio":0
+    }],
+    "fecha": this.getCurrentDate(),
+    "latitud":this.latitud,
+    "longitud":this.longitud,
+    "precio":""
   };
   try {
     const respuesta = await this._formService.finalizarInspeccion(pregunta);
-    return { mensaje: 'Fin OK', respuesta: respuesta };
+    if(respuesta.respuesta==true){
+       return { mensaje: 'Fin OK', respuesta: respuesta };
+    }else{
+      console.error('Error en Inspeción:', respuesta.error);
+      Swal.fire("Error en el servicio",'','error');
+      return { mensaje: 'Error Fin'};
+    }
   } catch (error) {
     console.error('Inspeccion Finalizada:', error);
     return { mensaje: 'Error Fin'};
   }
  }
+getCurrentDate(): string {
+  const today = new Date();
+  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const year = today.getFullYear();
 
+  return `${day}/${month}/${year}`;
+}
 }
