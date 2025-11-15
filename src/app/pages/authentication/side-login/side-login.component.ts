@@ -49,18 +49,14 @@ export class AppSideLoginComponent {
      this._autenticationService.validarUsuario(cedula,pin).subscribe(
       (respuesta:any)=>{
           console.log(respuesta);
-          if(respuesta.accesoConcedido==true){
+          if(respuesta.accesoConcedido==true && respuesta.rol=="MONITOREO"){
             localStorage.setItem('token', respuesta.token);
             localStorage.setItem('codigoUsuario', respuesta.codUsuario);
             localStorage.setItem('rol', respuesta.rol);
             localStorage.setItem('celular', respuesta.celular);
             localStorage.setItem('usuario', respuesta.usuario);
-            if(respuesta.rol=="DELEGADO"){
-              this.router.navigate(['/dashboard']);
-            }
-            if(respuesta.rol=="OPERADOR"){
-              this.router.navigate(['/inscripcion']);
-            }
+            this.router.navigate(['/dashboard']);
+
           }else{
             Swal.fire('Usuario/Clave incorrectos','','error');
           }

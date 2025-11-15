@@ -8,7 +8,7 @@ export const InscripcionRoutes: Routes = [
     data: {
       title: 'Inscripcion',
       urls: [
-        { title: 'Isscripcion', url: '/inscripcion' },
+        { title: 'Isscripcion', url: '/resultadoproyeccion' },
       ],
     }
   },

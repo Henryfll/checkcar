@@ -18,10 +18,17 @@ export const routes: Routes = [
           import('./pages/pages.routes').then((m) => m.PagesRoutes),
       },
       {
-        path: 'inscripcion',
+        path: 'resultadoproyeccion',
         loadChildren: () =>
           import('./pages/incripcion/inscripcion.routes').then(
             (m) => m.InscripcionRoutes
+          ),
+      },
+{
+        path: 'transmicion',
+        loadChildren: () =>
+          import('./pages/transmision/transmicion.routes').then(
+            (m) => m.TransmicionRoutes
           ),
       },
       /*{

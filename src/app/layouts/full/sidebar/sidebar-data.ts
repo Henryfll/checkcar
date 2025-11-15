@@ -2,22 +2,22 @@ import { NavItem } from './nav-item/nav-item';
 
 export const navItems: NavItem[] = [
   {
-    navCap: 'Menu',
+    navCap: 'Reportes',
   },
   {
-    displayName: 'Ingreso de Actas',
+    displayName: 'Monitoreo Junta',
     iconName: 'clipboard-text',
     route: '/dashboard',
   },
+  {
+    displayName: 'Resultados-Proyección',
+    iconName: 'clipboard-text',
+    route: '/resultadoproyeccion',
+  },
+  {
+    displayName: 'Transmición votación',
+    iconName: 'clipboard-text',
+    route: '/transmicion',
+  },
 ];
 
-export const navItemsOperador: NavItem[] = [
-  {
-    navCap: 'Menu',
-  },
-  {
-    displayName: 'Delegados',
-    iconName: 'clipboard-text',
-    route: '/inscripcion',
-  },
-];
