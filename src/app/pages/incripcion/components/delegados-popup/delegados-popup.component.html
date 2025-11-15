@@ -1,0 +1,199 @@
+<mat-card class="cardWithShadow theme-card">
+    <mat-card-header>
+        <mat-card-title class="m-b-0">
+            Actualizar Delegados - Junta: {{ juntaSeleccionada.junta }}
+        </mat-card-title>
+        <button mat-icon-button (click)="cerrarDialogo()" style="margin-left: auto;">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-card-header>
+    <mat-card-content class="b-t-1">
+
+
+        <div class="row">
+            <div class="table-responsive col-12">
+                <table class="tabla-sufragantes">
+                    <tr>
+                        <td class="col-etiqueta">
+                            <label>Delegado</label>
+                        </td>
+                        <td class="col-etiqueta">
+                            <label>Cedula</label>
+                        </td>
+                        <td class="col-etiqueta">
+                            <label>Apellidos y Nombres</label>
+                        </td>
+                        <td class="col-etiqueta">
+                            <label>Celular</label>
+                        </td>
+                        <td class="col-etiqueta">
+                            <label>Operadora</label>
+                        </td>
+                        <td class="col-etiqueta">
+                            <label>Referido por</label>
+                        </td>
+                        <td class="col-etiqueta">
+                            <label>Banco</label>
+                        </td>
+                        <td class="col-etiqueta">
+                            <label>Cuenta</label>
+                        </td>
+                        <td class="col-etiqueta">
+                            <label>Tipo Cuenta</label>
+                        </td>
+                        <td class="col-etiqueta">
+                            <label>Recarga</label>
+                        </td>
+                        <td class="col-etiqueta">
+                            <label>Recargado</label>
+                        </td>
+                        <td class="col-etiqueta">
+                            <label>Correo Electronico</label>
+                        </td>
+                        <td class="col-etiqueta">
+                            <label>Opciones</label>
+                        </td>
+
+                    </tr>
+                    <tr *ngIf="delegadoPrincipal">
+                        <td class="col-etiqueta">
+                            <label>PRINCIPAL</label>
+                        </td>
+                        <td>
+                            <input matInput placeholder="Cedula" type="text" style="width: 100px;"
+                                [(ngModel)]="delegadoPrincipal.cedula" maxlength="10" (keypress)="onlyNumbers($event)"
+                                pattern="[0-9]*" />
+                        </td>
+                        <td>
+                            <input matInput placeholder="Nombres" type="text" style="width: 250px;"
+                                [(ngModel)]="delegadoPrincipal.nombre" />
+                        </td>
+                        <td>
+                            <input matInput placeholder="Celular" type="text" style="width: 100px;"
+                                [(ngModel)]="delegadoPrincipal.celular" maxlength="10" (keypress)="onlyNumbers($event)"
+                                pattern="[0-9]*" />
+                        </td>
+                        <td>
+                            <mat-select placeholder="Operadoras" [(ngModel)]="delegadoPrincipal.operadora">
+                                <mat-option value="MOVISTAR">MOVISTAR</mat-option>
+                                <mat-option value="CLARO">CLARO</mat-option>
+                                <mat-option value="TUENTI">TUENTI</mat-option>
+                            </mat-select>
+                        </td>
+                        <td>
+                            <input matInput placeholder="Referido" type="text" style="width: 250px;"
+                                [(ngModel)]="delegadoPrincipal.referidoPor" />
+                        </td>
+                        <td>
+                            <input matInput placeholder="Banco" type="text" style="width: 150px;"
+                                [(ngModel)]="delegadoPrincipal.banco" />
+                        </td>
+                        <td>
+                            <input matInput placeholder="Cuenta" type="text" style="width: 150px;"
+                                [(ngModel)]="delegadoPrincipal.cuenta" maxlength="15" (keypress)="onlyNumbers($event)"
+                                pattern="[0-9]*" />
+                        </td>
+
+                        <td>
+                            <mat-select placeholder="Tipos Cuenta" [(ngModel)]="delegadoPrincipal.tipoCuenta">
+                                <mat-option value="AHORROS">AHORROS</mat-option>
+                                <mat-option value="CORRIENTE">CORRIENTE</mat-option>
+                            </mat-select>
+                        </td>
+                        <td>
+                            <mat-select placeholder="Recarga" [(ngModel)]="delegadoPrincipal.recarga">
+                                <mat-option value="SI">SI</mat-option>
+                                <mat-option value="NO">NO</mat-option>
+                            </mat-select>
+                        </td>
+                        <td>
+                            <mat-select placeholder="Recargado" [(ngModel)]="delegadoPrincipal.recargado">
+                                <mat-option value="SI">SI</mat-option>
+                                <mat-option value="NO">NO</mat-option>
+                            </mat-select>
+                        </td>
+                        <td>
+                            <input matInput placeholder="Correo" type="email" style="width: 250px;"
+                                [(ngModel)]="delegadoPrincipal.email" />
+                        </td>
+                        <td>
+                            <button mat-stroked-button color="accent" (click)="guardarPrincipal()">
+                                <mat-icon>save</mat-icon>Guardar
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="delegadoContingente">
+                        <td class="col-etiqueta">
+                            <label>CONTINGENTE</label>
+                        </td>
+                        <td>
+                            <input matInput placeholder="Cedula" type="text" style="width: 100%;"
+                                [(ngModel)]="delegadoContingente.cedula" maxlength="10" (keypress)="onlyNumbers($event)"
+                                pattern="[0-9]*" />
+                        </td>
+                        <td>
+                            <input matInput placeholder="Nombres" type="text" style="width: 100%;"
+                                [(ngModel)]="delegadoContingente.nombre" />
+                        </td>
+                        <td>
+                            <input matInput placeholder="Celular" type="text" style="width: 100%;"
+                                [(ngModel)]="delegadoContingente.celular" maxlength="10" (keypress)="onlyNumbers($event)"
+                                pattern="[0-9]*" />
+                        </td>
+                        <td>
+                            <mat-select placeholder="Operadoras" [(ngModel)]="delegadoContingente.operadora">
+                                <mat-option value="MOVISTAR">MOVISTAR</mat-option>
+                                <mat-option value="CLARO">CLARO</mat-option>
+                                <mat-option value="TUENTI">TUENTI</mat-option>
+                            </mat-select>
+                        </td>
+                        <td>
+                            <input matInput placeholder="Referido" type="text" style="width: 100%;"
+                                [(ngModel)]="delegadoContingente.referidoPor" />
+                        </td>
+                        <td>
+                            <input matInput placeholder="Banco" type="text" style="width: 100%;"
+                                [(ngModel)]="delegadoContingente.banco" />
+                        </td>
+                        <td>
+                            <input matInput placeholder="Cuenta" type="text" style="width: 100%;"
+                                [(ngModel)]="delegadoContingente.cuenta" maxlength="15" (keypress)="onlyNumbers($event)"
+                                pattern="[0-9]*" />
+                        </td>
+
+                        <td>
+                            <mat-select placeholder="Tipos Cuenta" [(ngModel)]="delegadoContingente.tipoCuenta">
+                                <mat-option value="AHORROS">AHORROS</mat-option>
+                                <mat-option value="CORRIENTE">CORRIENTE</mat-option>
+                            </mat-select>
+                        </td>
+                        <td>
+                            <mat-select placeholder="Recarga" [(ngModel)]="delegadoContingente.recarga">
+                                <mat-option value="SI">SI</mat-option>
+                                <mat-option value="NO">NO</mat-option>
+                            </mat-select>
+                        </td>
+                        <td>
+                            <mat-select placeholder="Recargado" [(ngModel)]="delegadoContingente.recargado">
+                                <mat-option value="SI">SI</mat-option>
+                                <mat-option value="NO">NO</mat-option>
+                            </mat-select>
+                        </td>
+                        <td>
+                            <input matInput placeholder="Correo" type="email" style="width: 100%;"
+                                [(ngModel)]="delegadoContingente.email" />
+                        </td>
+                        <td>
+                            <button mat-stroked-button color="accent" (click)="guardarContingente()">
+                                <mat-icon>save</mat-icon>Guardar
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+
+    </mat-card-content>
+</mat-card>

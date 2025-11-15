@@ -1,151 +1,63 @@
 import { U } from '@angular/cdk/keycodes';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Accesorio } from '../interfaces/accesorio';
 import { lastValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { Junta } from '../interfaces/junta';
+import { NumberValueAccessor } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormularioService {
 
-   url="https://sistema.saferisk.ec/SW_AutoInspeccion/api/DatosInspeccion";
+   url=environment.url_back;
 
 
   constructor(
     public _http:HttpClient
   ) { }
 
-  /*guardarInspeccion(inspeccion:any){
-    let jsonEnvio={
-      "cedula":inspeccion.cedula,
-      "aseguradora":inspeccion.aseguradora,
-      "nro_caso":inspeccion.nro_caso,
-      "seccion":inspeccion.seccion,
-      "imagen":inspeccion.imagen
-    };
 
-   return this._http.post(this.url,jsonEnvio);
-  }
-
-  guardarObservacion(inspeccion:any){
-    let jsonEnvio={
-      "cedula":inspeccion.cedula,
-      "aseguradora":inspeccion.aseguradora,
-      "nro_caso":inspeccion.nro_caso,
-      "seccion":inspeccion.seccion,
-      "observacion":inspeccion.observacion
-    };
-
-   return this._http.post(this.url,jsonEnvio);
-  }
-  guardarAccesorios(inspeccion:any){
-    let jsonEnvio={
-      "cedula":inspeccion.cedula,
-      "aseguradora":inspeccion.aseguradora,
-      "nro_caso":inspeccion.nro_caso,
-      "seccion":inspeccion.seccion,
-      "observacion":inspeccion.accesorios
-    };
-
-   return this._http.post(this.url,jsonEnvio);
-  }
-
-  guardarChoque(inspeccion:any){
-    let jsonEnvio={
-      "cedula":inspeccion.cedula,
-      "aseguradora":inspeccion.aseguradora,
-      "nro_caso":inspeccion.nro_caso,
-      "seccion":inspeccion.seccion,
-      "observacion":{
-        "nombre":inspeccion.obsnombre,
-		    "imagen":inspeccion.obsimagen,
-		    "precio":inspeccion.obsprecio
-      }
-    };
-
-   return this._http.post(this.url,jsonEnvio);
-  }
-  finalizarInspeccion(inspeccion:any){
-    let jsonEnvio={
-      "cedula":inspeccion.cedula,
-      "aseguradora":inspeccion.aseguradora,
-      "nro_caso":inspeccion.nro_caso
-    };
-
-   return this._http.post(this.url,jsonEnvio);
-  }*/
-   guardarInspeccion(inspeccion: any): Promise<any> {
+   buscarJuntasCedulaCelular(cedula: string, celular:string) {
     const jsonEnvio = {
-      cedula: inspeccion.cedula,
-      aseguradora: inspeccion.aseguradora,
-      nro_caso: inspeccion.nro_caso,
-      seccion: inspeccion.seccion,
-      imagen: inspeccion.imagen,
-      observacion: inspeccion.observacion,
-      fechaHora: inspeccion.fecha,
-      latitud:inspeccion.latitud,
-      longitud:inspeccion.longitud,
-      precio:inspeccion.precio
+      cedula: cedula,
+      celular:celular
     };
-    return lastValueFrom(this._http.post(this.url, jsonEnvio));
+    let url_final=`${this.url}private/buscarJuntasPorCedulaCelular`;
+    return this._http.post(url_final, jsonEnvio);
   }
 
-  guardarObservacion(inspeccion: any): Promise<any> {
+   guardarJunta(junta:Junta) {
     const jsonEnvio = {
-      cedula: inspeccion.cedula,
-      aseguradora: inspeccion.aseguradora,
-      nro_caso: inspeccion.nro_caso,
-      seccion: inspeccion.seccion,
-      observacion: inspeccion.observacion,
-      fechaHora: inspeccion.fecha,
-      latitud:inspeccion.latitud,
-      longitud:inspeccion.longitud,
-      precio:inspeccion.precio
+      codigo: junta.codigo,
+      sufragantes:junta.sufragantes,
+      blancos: junta.blancos,
+      nulos:junta.nulos,
+      si:junta.si,
+      no:junta.no,
+      estDelegado:junta.estDelegado,
+      obsDelegado:junta.obsDelegado,
+      voluntario:junta.voluntario,
+      estVotacion:junta.estVotacion,
+      instaloJrv:junta.instaloJrv,
+      estaManana:junta.estaManana,
+      estaTarde:junta.estaTarde,
+      usrActualiza:junta.usrActualiza,
+      obsVotacion:junta.obsVotacion
     };
-    return lastValueFrom(this._http.post(this.url, jsonEnvio));
+    let url_final=`${this.url}private/actualizarJunta`;
+    return this._http.post(url_final, jsonEnvio);
   }
 
-  guardarAccesorios(inspeccion: any): Promise<any> {
+  guardarJuntaImagen(junta:Junta, imagen:string) {
     const jsonEnvio = {
-      cedula: inspeccion.cedula,
-      aseguradora: inspeccion.aseguradora,
-      nro_caso: inspeccion.nro_caso,
-      seccion: inspeccion.seccion,
-      observacion: inspeccion.accesorios,
-      fechaHora: inspeccion.fecha,
-      latitud:inspeccion.latitud,
-      longitud:inspeccion.longitud,
-      precio:inspeccion.precio
+      codigo: junta.codigo,
+      imagen: imagen
     };
-    return lastValueFrom(this._http.post(this.url, jsonEnvio));
+    console.log(jsonEnvio);
+    let url_final=`${this.url}private/actualizarJuntaImagen`;
+    return this._http.post(url_final, jsonEnvio);
   }
 
-  guardarChoque(inspeccion: any): Promise<any> {
-    const jsonEnvio = {
-      cedula: inspeccion.cedula,
-      aseguradora: inspeccion.aseguradora,
-      nro_caso: inspeccion.nro_caso,
-      seccion: inspeccion.seccion,
-      observacion: {
-        nombre: inspeccion.obsnombre,
-        imagen: inspeccion.obsimagen,
-        precio: inspeccion.obsprecio,
-      },
-      fechaHora: inspeccion.fecha,
-      latitud:inspeccion.latitud,
-      longitud:inspeccion.longitud,
-      precio:inspeccion.precio
-    };
-    return lastValueFrom(this._http.post(this.url, jsonEnvio));
-  }
-
-  finalizarInspeccion(inspeccion: any): Promise<any> {
-    const jsonEnvio = {
-      cedula: inspeccion.cedula,
-      aseguradora: inspeccion.aseguradora,
-      nro_caso: inspeccion.nro_caso,
-    };
-    return lastValueFrom(this._http.post(this.url, jsonEnvio));
-  }
 }

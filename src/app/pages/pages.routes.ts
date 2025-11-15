@@ -11,6 +11,7 @@ export const PagesRoutes: Routes = [
         { title: 'Dashboard', url: '/dashboard' },
         { title: 'Starter' },
       ],
-    },
+    }
   },
+
 ];

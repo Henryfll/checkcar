@@ -32,7 +32,7 @@ export class AppSideLoginComponent {
   ) {}
 
   form = new FormGroup({
-    username: new FormControl('', [Validators.required, Validators.minLength(10)]),
+    username: new FormControl('', [Validators.required]),
     pin: new FormControl('', [Validators.required]),
   });
 
@@ -49,9 +49,22 @@ export class AppSideLoginComponent {
      this._autenticationService.validarUsuario(cedula,pin).subscribe(
       (respuesta:any)=>{
           console.log(respuesta);
-          localStorage.setItem('aseguradora', respuesta.aseguradora);
-          localStorage.setItem('nro_caso', respuesta.nro_caso);
-          this.router.navigate(['/dashboard']);
+          if(respuesta.accesoConcedido==true){
+            localStorage.setItem('token', respuesta.token);
+            localStorage.setItem('codigoUsuario', respuesta.codUsuario);
+            localStorage.setItem('rol', respuesta.rol);
+            localStorage.setItem('celular', respuesta.celular);
+            localStorage.setItem('usuario', respuesta.usuario);
+            if(respuesta.rol=="DELEGADO"){
+              this.router.navigate(['/dashboard']);
+            }
+            if(respuesta.rol=="OPERADOR"){
+              this.router.navigate(['/inscripcion']);
+            }
+          }else{
+            Swal.fire('Usuario/Clave incorrectos','','error');
+          }
+
       },
       (error)=>{
         Swal.fire('Error en el ingreso','','error');

@@ -56,7 +56,7 @@ export class CameraCaptureComponent implements OnInit{
     });
   }
 
-  capture(): void {
+  /*capture(): void {
     const video = this.videoElement.nativeElement;
     const canvas = this.canvasElement.nativeElement;
     const context = canvas.getContext('2d');
@@ -69,7 +69,37 @@ export class CameraCaptureComponent implements OnInit{
       const photoData = canvas.toDataURL('image/png');
       this.dialogRef.close(photoData); // Devuelve la foto al cerrar el diálogo
     }
+  }*/
+
+    capture(): void {
+  const video = this.videoElement.nativeElement;
+  const canvas = this.canvasElement.nativeElement;
+  const context = canvas.getContext('2d');
+
+  if (!context || video.videoWidth === 0) {
+    console.error("Error: video aún no está listo.");
+    return;
   }
+
+  // Reducción automática a 1024px de ancho (evita errores en móviles viejos)
+  const maxWidth = 1024;
+  const scale = maxWidth / video.videoWidth;
+
+  canvas.width = maxWidth;
+  canvas.height = video.videoHeight * scale;
+
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  try {
+    const photoData = canvas.toDataURL('image/jpeg', 0.8); // JPEG es más seguro que PNG
+    this.dialogRef.close(photoData);
+  } catch (e) {
+    console.error("Error generando Base64:", e);
+    alert("Error al capturar imagen. Intenta nuevamente.");
+    this.dialogRef.close();
+  }
+}
+
 
   cancel(): void {
     this.closeCamera();

@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatSidenav, MatSidenavContent } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
-import { navItems } from './sidebar/sidebar-data';
+import { navItems, navItemsOperador } from './sidebar/sidebar-data';
 import { NavService } from '../../services/nav.service';
 import { AppNavItemComponent } from './sidebar/nav-item/nav-item.component';
 import { RouterModule } from '@angular/router';
@@ -51,13 +51,17 @@ export class FullComponent implements OnInit {
   private isContentWidthFixed = true;
   private isCollapsedWidthFixed = false;
   private htmlElement!: HTMLHtmlElement;
+  private rol:string;
 
   get isOver(): boolean {
     return this.isMobileScreen;
   }
 
   constructor(private breakpointObserver: BreakpointObserver, private navService: NavService) {
-    
+    this.rol= localStorage.getItem('rol')!;
+    if(this.rol=="OPERADOR"){
+      this.navItems=navItemsOperador;
+    }
     this.htmlElement = document.querySelector('html')!;
     this.htmlElement.classList.add('light-theme');
     this.layoutChangesSubscription = this.breakpointObserver

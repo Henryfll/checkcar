@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AutenticacionService {
 
+  url=environment.url_back;
 
   constructor(
     public _http:HttpClient
@@ -13,10 +15,10 @@ export class AutenticacionService {
 
   validarUsuario(usuario:string,pin:string){
     let jsonEnvio={
-      "cedula": usuario,
-      "pin":pin
+      "usuario": usuario,
+      "clave":pin
     };
-    let url_ws=`https://sistema.saferisk.ec/SW_AutoInspeccion/api/ValidaUsuario`;
+    let url_ws=`${this.url}public/loginAplicacion`;
    return this._http.post(url_ws,jsonEnvio);
   }
 }
