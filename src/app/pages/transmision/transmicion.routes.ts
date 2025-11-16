@@ -6,9 +6,9 @@ export const TransmicionRoutes: Routes = [
     path: '',
     component: TransmicionComponent,
     data: {
-      title: 'Transmicion',
+      title: 'Transmision',
       urls: [
-        { title: 'Transmicion', url: '/transmicion' },
+        { title: 'Transmicion', url: '/transmision' },
       ],
     }
   },

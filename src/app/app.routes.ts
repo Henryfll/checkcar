@@ -25,7 +25,7 @@ export const routes: Routes = [
           ),
       },
 {
-        path: 'transmicion',
+        path: 'transmision',
         loadChildren: () =>
           import('./pages/transmision/transmicion.routes').then(
             (m) => m.TransmicionRoutes

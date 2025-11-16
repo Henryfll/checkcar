@@ -77,7 +77,6 @@ constructor(
   }
 }
   ngOnInit(): void {
-    this.activarEnvioImagen=false;
    }
 
    }
