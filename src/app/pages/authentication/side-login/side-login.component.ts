@@ -29,7 +29,16 @@ export class AppSideLoginComponent {
   constructor(
     private router: Router,
     private _autenticationService:AutenticacionService,
-  ) {}
+  ) {
+
+      /*const rol= localStorage.getItem('rol')!;
+      if(rol!='OPERADOR'){
+        this.router.navigate(['/inscripcion']);
+      }
+      if(rol!='DELEGADO'){
+         this.router.navigate(['/dashboard']);
+      }*/
+  }
 
   form = new FormGroup({
     username: new FormControl('', [Validators.required]),

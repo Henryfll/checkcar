@@ -24,7 +24,26 @@ export const routes: Routes = [
             (m) => m.InscripcionRoutes
           ),
       },
+      {
+        path: 'transmision',
+        loadChildren: () =>
+          import('./pages/transmision/transmision.routes').then(
+            (m) => m.TransmisionRoutes
+          ),
+      },
+      {
+        path: 'visor',
+        loadChildren: () =>
+          import('./pages/visor/visor.routes').then(
+            (m) => m.VisorRoutes
+          ),
+      },
       /*{
+        path: '**',
+        redirectTo: '/authentication/login',
+        pathMatch: 'full',
+      }
+      {
         path: 'extra',
         loadChildren: () =>
           import('./pages/extra/extra.routes').then((m) => m.ExtraRoutes),

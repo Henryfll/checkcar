@@ -91,10 +91,10 @@
 </div>
 </form>
  <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="enviarDatosActa()" *ngIf="!activarEnvioImagen">
+      <button mat-raised-button color="primary" (click)="enviarDatosActa()" *ngIf="!activarEnvioImagen" disabled="true">
               <mat-icon>save</mat-icon>
               Enviar Datos</button>
-              <button mat-raised-button color="secundary" (click)="enviarDatosActa()" *ngIf="activarEnvioImagen">
+              <button mat-raised-button color="secundary" (click)="enviarDatosActa()" *ngIf="activarEnvioImagen" disabled="true">
               <mat-icon>save</mat-icon>
               Enviar Datos</button>
 
@@ -119,7 +119,7 @@
              <img *ngIf="actaPhoto" [src]="actaPhoto" alt="Foto Contrato" width="50%"/>
 
 <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="enviarImagenActa()">
+      <button mat-raised-button color="primary" (click)="enviarImagenActa()" disabled="true">
               <mat-icon>save</mat-icon>
               Enviar Imagen</button>
 

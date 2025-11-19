@@ -32,4 +32,7 @@ instaloJrv:string;
 estaManana:string;
 estaTarde:string;
 usrActualiza:string;
+nombre?:string;
+celular?:string;
+anexos?:number;
 }

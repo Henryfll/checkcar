@@ -1,9 +1,13 @@
-<div class="p-4 min-h-screen">
-  <mat-card class="cardWithShadow theme-card p-4">
+<div class="min-h-screen" style="padding: 0 !important;">
+  <mat-card class="cardWithShadow theme-card p-4 full-width-card">
     <mat-card-header>
       <mat-card-title class="m-b-0">Delegados</mat-card-title>
     </mat-card-header>
     <mat-card-content class="b-t-1">
+      <div class="row justify-content-end">
+        <button class="btn btn-info" mat-raised-button color="primary"
+          (click)="nuevaBusqueda()"> <mat-icon>refresh</mat-icon> Refrescar</button>
+      </div>
       <div class="row">
         <div class="col-12">
           <div class="table-scroll-container">

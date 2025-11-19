@@ -20,6 +20,18 @@ export class DelegadoServiceService {
       return this._http.get(url_final);
     }
 
+     listarJuntasTransmision() {
+      let url_final=`${this.url}private/listarJuntasTransmmicion`;
+      return this._http.get(url_final);
+    }
+ listarJuntasCelulares() {
+      let url_final=`${this.url}private/listarJuntasCelulares`;
+      return this._http.get(url_final);
+    }
+listarJuntasImagenes() {
+      let url_final=`${this.url}private/listarJuntasImagenes`;
+      return this._http.get(url_final);
+    }
 guardarDelegado(delegado:Delegado) {
     let url_final=`${this.url}private/guardarDelegado`;
     return this._http.post(url_final, delegado);
@@ -31,5 +43,11 @@ guardarDelegado(delegado:Delegado) {
     }
     let url_final=`${this.url}private/buscarDelegadoJunta`;
     return this._http.post(url_final, jsonEnvio);
+  }
+
+
+   listarImagenesAnexos(junta:number) {
+    let url_final=`${this.url}private/buscarImagenesAnexas/${junta}`;
+    return this._http.get(url_final);
   }
 }

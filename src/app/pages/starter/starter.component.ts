@@ -18,6 +18,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { Junta } from './interfaces/junta';
+import { ImagenJunta } from './interfaces/imagenjunta';
 
 @Component({
   selector: 'app-starter',
@@ -54,6 +55,7 @@ export class StarterComponent {
   recinto:string="";
   listaJuntas:Junta[]=[];
   actaPhoto: string | null = null;
+  enviarMasImagenes:boolean=false;
 
  actaFormGroup = this._formBuilder.group({
     sufragantes: [0],
@@ -76,6 +78,7 @@ constructor(
     localStorage.clear();
         this.router.navigate(['/authentication/login']);
   }
+  this.enviarMasImagenes=false;
 }
   ngOnInit(): void {
     this.activarEnvioImagen=false;
@@ -113,12 +116,14 @@ constructor(
       });
     if(this.junta.imagen!=null){
       this.actaPhoto='data:image/png;base64,'+this.junta.imagen;
+      this.enviarMasImagenes=true;
     }else{
       this.actaPhoto=null;
+      this.enviarMasImagenes=false;
     }
-    if(this.junta.sufragantes>0 || this.junta.blancos>0 || this.junta.nulos>0 ||
-      this.junta.si>0 || this.junta.no>0
-    ){
+    console.log(this.junta.estVotacion=='SI')
+    if(this.junta.estVotacion=='SI')
+    {
       this.activarEnvioImagen=true;
     }else{
       this.activarEnvioImagen=false;
@@ -179,10 +184,14 @@ constructor(
    enviarImagenActa(){
     this.spinner.show();
     const base64Limpio = this.actaPhoto!.split(',')[1];
-    this.formularioService.guardarJuntaImagen(this.junta, base64Limpio).subscribe(
+
+    if(this.enviarMasImagenes){
+      this.formularioService.guardarImagenes(this.junta, base64Limpio).subscribe(
       (respuesta:any)=>{
+        let juntaenviada:ImagenJunta=respuesta.objeto;
+        this.actaPhoto=null;
         this.spinner.hide();
-        Swal.fire('Imagen Registrada','','info');
+        Swal.fire('Imagen Guardada, si puede, envíe fotos de otras juntas','','info');
       },
       (error)=>{
         this.spinner.hide();
@@ -190,6 +199,27 @@ constructor(
         Swal.fire('Error, vuelva a intentar','','error');
       }
     );
+    }else{
+      this.formularioService.guardarJuntaImagen(this.junta, base64Limpio).subscribe(
+      (respuesta:any)=>{
+        let juntaenviada:Junta=respuesta.objeto;
+        if(juntaenviada.imagen!=null){
+          this.enviarMasImagenes=true;
+        }else{
+          this.enviarMasImagenes=false;
+        }
+        this.actaPhoto=null;
+        this.spinner.hide();
+        Swal.fire('Imagen Guardada, si puede, envíe fotos de otras juntas','','info');
+      },
+      (error)=>{
+        this.spinner.hide();
+        console.log("error",error);
+        Swal.fire('Error, vuelva a intentar','','error');
+      }
+    );
+    }
+
    }
 
    openCameraDialog(): void {

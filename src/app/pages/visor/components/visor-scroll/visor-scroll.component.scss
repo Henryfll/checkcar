@@ -1,0 +1,51 @@
+/* Archivo: galeria-imagenes.component.css */
+
+.scroll-container {
+  width: 100%;
+  overflow-x: auto; /* Habilita el scroll horizontal */
+  white-space: nowrap; /* Evita que los elementos hijos se envuelvan */
+  padding: 10px 0; /* Espacio vertical */
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.1); /* Sutil sombra interna para indicar scroll */
+  border-radius: 8px;
+  background-color: #f5f5f5;
+}
+
+.image-gallery {
+  display: flex; /* Alinea los elementos en una fila */
+  gap: 15px; /* Espacio entre las imágenes */
+  padding: 0 10px; /* Padding horizontal dentro del scroll */
+}
+
+.image-item {
+  flex-shrink: 0; /* Evita que las imágenes se encojan */
+  width: 300px; /* Ancho fijo para cada imagen */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden; /* Asegura que el contenido se ajuste al borde redondeado */
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Empuja info a la parte inferior */
+}
+
+.image-item img {
+  width: 100%; /* La imagen ocupa todo el ancho del contenedor */
+  height: 250px; /* Altura fija para las imágenes */
+  object-fit: cover; /* Recorta la imagen para cubrir el área sin distorsionarla */
+  display: block; /* Elimina espacio extra debajo de la imagen */
+}
+
+.image-info {
+  padding: 10px;
+  font-size: 0.9em;
+  color: #555;
+  text-align: center;
+  border-top: 1px solid #eee;
+  background-color: #fafafa;
+}
+
+.image-info p {
+  margin: 0;
+  line-height: 1.4;
+}

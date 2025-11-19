@@ -144,7 +144,6 @@ applySelectFilter(column: string, value: string) {
   this.dataSource.filter = JSON.stringify(this.filters);
 }
   nuevaBusqueda(){
-    this.busqueda=null;
     this.buscarJuntas();
   }
 

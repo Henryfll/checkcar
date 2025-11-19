@@ -56,8 +56,16 @@ export class FormularioService {
       codigo: junta.codigo,
       imagen: imagen
     };
-    console.log(jsonEnvio);
     let url_final=`${this.url}private/actualizarJuntaImagen`;
+    return this._http.post(url_final, jsonEnvio);
+  }
+
+  guardarImagenes(junta:Junta, imagen:string) {
+    const jsonEnvio = {
+      codigo: junta.codigo,
+      imagen: imagen
+    };
+    let url_final=`${this.url}private/enviarImagenes`;
     return this._http.post(url_final, jsonEnvio);
   }
 

@@ -1,0 +1,35 @@
+<mat-card class="cardWithShadow theme-card">
+    <mat-card-header>
+        <mat-card-title class="m-b-0">
+          Anexos
+        </mat-card-title>
+         <button mat-icon-button (click)="cerrarDialogo()" style="margin-left: auto;">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-card-header>
+    <mat-card-content class="b-t-1">
+
+      <div class="scroll-container">
+  <div class="image-gallery">
+    <h1>{{mensaje}}</h1>
+    <div *ngFor="let img of imagenes" class="image-item">
+      <img [src]="img.imagen" alt="Imagen {{img.codigoJunta}}">
+      <div class="image-info">
+        <button style="width: 130px;"
+                    mat-stroked-button
+                    color="primary"
+                    (click)="descargarImagen(img)"
+                  >
+                    <mat-icon>download</mat-icon> Descargar
+                  </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    </mat-card-content>
+</mat-card>
+
+
+

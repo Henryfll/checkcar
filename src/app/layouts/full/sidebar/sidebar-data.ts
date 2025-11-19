@@ -20,4 +20,14 @@ export const navItemsOperador: NavItem[] = [
     iconName: 'clipboard-text',
     route: '/inscripcion',
   },
+  {
+    displayName: 'Transmisión',
+    iconName: 'clipboard-text',
+    route: '/transmision',
+  },
+  /*{
+    displayName: 'Visor',
+    iconName: 'clipboard-text',
+    route: '/visor',
+  },*/
 ];
